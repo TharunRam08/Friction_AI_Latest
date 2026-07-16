@@ -9,10 +9,12 @@ import json
 from concurrent.futures import ThreadPoolExecutor
 from dotenv import load_dotenv
 from groq import Groq
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
+import shutil
+import time
 
 from modules.m01_intent import get_intent
 from modules.m02_friction import get_friction_level
@@ -322,6 +324,118 @@ async def reason(request: QueryRequest):
 
 
 # ── Data Sources API ──────────────────────────────────────────────────────────
+def parse_pdf(file_path: str) -> str:
+    from pypdf import PdfReader
+    reader = PdfReader(file_path)
+    text = ""
+    for page in reader.pages:
+        t = page.extract_text()
+        if t:
+            text += t + "\n"
+    return text
+
+def parse_excel(file_path: str) -> str:
+    import openpyxl
+    wb = openpyxl.load_workbook(file_path, data_only=True)
+    text_parts = []
+    for sheet_name in wb.sheetnames:
+        sheet = wb[sheet_name]
+        text_parts.append(f"Sheet: {sheet_name}")
+        for r_idx, row in enumerate(sheet.iter_rows(values_only=True), 1):
+            if any(cell is not None for cell in row):
+                row_str = ", ".join(f"Col {col_idx}: {cell}" for col_idx, cell in enumerate(row, 1) if cell is not None)
+                text_parts.append(f"Row {r_idx}: {row_str}")
+    return "\n".join(text_parts)
+
+def parse_csv(file_path: str) -> str:
+    import csv
+    text_parts = []
+    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+        reader = csv.reader(f)
+        for r_idx, row in enumerate(reader, 1):
+            if row:
+                row_str = ", ".join(f"Col {col_idx}: {cell}" for col_idx, cell in enumerate(row, 1) if cell)
+                text_parts.append(f"Row {r_idx}: {row_str}")
+    return "\n".join(text_parts)
+
+def parse_txt(file_path: str) -> str:
+    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+        return f.read()
+
+def clean_text(text: str) -> str:
+    lines = text.split("\n")
+    cleaned_lines = []
+    for line in lines:
+        cleaned_line = " ".join(line.split()).strip()
+        if cleaned_line:
+            cleaned_lines.append(cleaned_line)
+    return "\n".join(cleaned_lines)
+
+def save_uploaded_doc_metadata(doc_id: str, filename: str, file_type: str, size_bytes: int, chunks: list):
+    uploaded_json_path = os.path.join(os.path.dirname(__file__), "data", "uploaded_docs.json")
+    
+    docs = []
+    if os.path.exists(uploaded_json_path):
+        try:
+            with open(uploaded_json_path, "r", encoding="utf-8") as f:
+                docs = json.load(f)
+        except Exception:
+            docs = []
+            
+    new_doc = {
+        "id": doc_id,
+        "filename": filename,
+        "file_type": file_type,
+        "size_bytes": size_bytes,
+        "summary": f"{file_type} File • {len(chunks)} text chunks indexed",
+        "tags": ["Uploaded", file_type],
+        "chunks": [{"index": i, "text": chunk} for i, chunk in enumerate(chunks)]
+    }
+    
+    docs.append(new_doc)
+    
+    with open(uploaded_json_path, "w", encoding="utf-8") as f:
+        json.dump(docs, f, indent=2, ensure_ascii=False)
+
+def delete_uploaded_doc_metadata(doc_id: str) -> bool:
+    uploaded_json_path = os.path.join(os.path.dirname(__file__), "data", "uploaded_docs.json")
+    if not os.path.exists(uploaded_json_path):
+        return False
+        
+    try:
+        with open(uploaded_json_path, "r", encoding="utf-8") as f:
+            docs = json.load(f)
+            
+        target_doc = None
+        for doc in docs:
+            if doc["id"] == doc_id:
+                target_doc = doc
+                break
+                
+        if not target_doc:
+            return False
+            
+        # Remove from Vectordb Chroma DB
+        from data.vectordb import remove_document_from_vector_db
+        remove_document_from_vector_db(doc_id, len(target_doc["chunks"]))
+        
+        # Remove original file if exists
+        upload_dir = os.path.join(os.path.dirname(__file__), "data", "uploads")
+        file_path = os.path.join(upload_dir, target_doc["filename"])
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            
+        # Update metadata JSON
+        docs = [d for d in docs if d["id"] != doc_id]
+        with open(uploaded_json_path, "w", encoding="utf-8") as f:
+            json.dump(docs, f, indent=2, ensure_ascii=False)
+            
+        return True
+    except Exception as e:
+        print(f"⚠️ Error deleting document metadata: {e}")
+        return False
+
+
 @app.get("/data-sources")
 async def data_sources_summary():
     # Load summaries
@@ -351,6 +465,26 @@ async def data_sources_summary():
     for tbl in tables:
         counts[tbl] = cur.execute(f"SELECT COUNT(*) FROM {tbl}").fetchone()[0]
     conn.close()
+
+    # Load uploaded documents
+    uploaded_json_path = os.path.join(os.path.dirname(__file__), "data", "uploaded_docs.json")
+    uploaded_sources = []
+    if os.path.exists(uploaded_json_path):
+        try:
+            with open(uploaded_json_path, "r", encoding="utf-8") as f:
+                docs = json.load(f)
+                for doc in docs:
+                    uploaded_sources.append({
+                        "id": doc["id"],
+                        "label": doc["filename"],
+                        "icon": "file-text",
+                        "row_count": len(doc["chunks"]),
+                        "status": "connected",
+                        "summary": doc["summary"],
+                        "tags": doc["tags"]
+                    })
+        except Exception as e:
+            print(f"⚠️ Error reading uploaded_docs.json: {e}")
 
     return {
         "sources": [
@@ -471,7 +605,7 @@ async def data_sources_summary():
                 "summary": f"Total ARR ${contracts['total_arr']:,.0f} • At-Risk ARR ${contracts['at_risk_arr']:,.0f}",
                 "tags": ["Contracts", "ARR"]
             },
-        ]
+        ] + uploaded_sources
     }
 
 
@@ -483,6 +617,28 @@ async def data_source_rows(table: str, limit: int = 100):
         "suppliers", "expenses", "kpis", "contracts"
     }
     if table not in allowed:
+        if table.startswith("uploaded_"):
+            uploaded_json_path = os.path.join(os.path.dirname(__file__), "data", "uploaded_docs.json")
+            if os.path.exists(uploaded_json_path):
+                try:
+                    with open(uploaded_json_path, "r", encoding="utf-8") as f:
+                        docs = json.load(f)
+                        for doc in docs:
+                            if doc["id"] == table:
+                                return {
+                                    "table": table,
+                                    "columns": ["chunk_index", "text_content", "characters"],
+                                    "rows": [
+                                        {
+                                            "chunk_index": c["index"],
+                                            "text_content": c["text"],
+                                            "characters": len(c["text"])
+                                        } for c in doc["chunks"]
+                                    ][:limit],
+                                    "total": len(doc["chunks"])
+                                }
+                except Exception as e:
+                    print(f"⚠️ Error loading uploaded document rows: {e}")
         return {"error": "Invalid table", "rows": [], "columns": []}
     conn = sqlite3.connect(CRM_DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -491,6 +647,78 @@ async def data_source_rows(table: str, limit: int = 100):
     columns = [d[0] for d in cur.description] if rows else []
     conn.close()
     return {"table": table, "columns": columns, "rows": [dict(r) for r in rows], "total": len(rows)}
+
+
+@app.post("/upload-document")
+async def upload_document(file: UploadFile = File(...)):
+    upload_dir = os.path.join(os.path.dirname(__file__), "data", "uploads")
+    os.makedirs(upload_dir, exist_ok=True)
+    file_path = os.path.join(upload_dir, file.filename)
+    
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    except Exception as e:
+        return {"success": False, "error": f"Failed to save file: {str(e)}"}
+        
+    size_bytes = os.path.getsize(file_path)
+    ext = os.path.splitext(file.filename)[1].lower()
+    text = ""
+    file_type = ext[1:].upper() if ext else "UNKNOWN"
+    
+    try:
+        if ext == ".pdf":
+            text = parse_pdf(file_path)
+        elif ext in (".xlsx", ".xls"):
+            text = parse_excel(file_path)
+        elif ext == ".csv":
+            text = parse_csv(file_path)
+        elif ext in (".txt", ".md", ".json"):
+            text = parse_txt(file_path)
+        else:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            return {"success": False, "error": f"Unsupported file type: {ext}"}
+    except Exception as e:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        return {"success": False, "error": f"Failed to parse file: {str(e)}"}
+        
+    cleaned = clean_text(text)
+    if not cleaned:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        return {"success": False, "error": "Document contains no readable text."}
+        
+    from data.vectordb import add_document_to_vector_db
+    sanitized_name = "".join(c for c in os.path.splitext(file.filename)[0] if c.isalnum() or c in ("_", "-")).lower()
+    doc_id = f"uploaded_{sanitized_name}_{int(time.time())}"
+    
+    try:
+        chunks = add_document_to_vector_db(cleaned, file.filename, doc_id)
+    except Exception as e:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        return {"success": False, "error": f"Failed to generate embeddings: {str(e)}"}
+    
+    try:
+        save_uploaded_doc_metadata(doc_id, file.filename, file_type, size_bytes, chunks)
+    except Exception as e:
+        return {"success": False, "error": f"Failed to save metadata: {str(e)}"}
+    
+    return {
+        "success": True,
+        "filename": file.filename,
+        "doc_id": doc_id,
+        "chunks_count": len(chunks),
+        "total_chars": len(cleaned)
+    }
+
+
+@app.delete("/upload-document/{doc_id}")
+async def delete_document(doc_id: str):
+    success = delete_uploaded_doc_metadata(doc_id)
+    return {"success": success}
 
 
 
@@ -621,6 +849,277 @@ async def future_forecast(request: FutureForecastRequest):
         "scenarios": scenarios_out,
         "base_revenue": base_revenue,
         "base_pipeline": base_pipeline,
+    }
+
+
+# ── Canary Anomaly Engine Endpoint ────────────────────────────────────────────
+from datetime import datetime, timedelta
+from modules.m10_canary import calculate_drift, run_canary_analysis
+
+def init_business_memory():
+    conn = sqlite3.connect(CRM_DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='business_memory'")
+    exists = cursor.fetchone()
+    if not exists:
+        cursor.execute("""
+            CREATE TABLE business_memory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pattern_name TEXT,
+                revenue_drift REAL,
+                expenses_drift REAL,
+                tickets_drift REAL,
+                inventory_drift REAL
+            )
+        """)
+        patterns = [
+            ("Cash Flow Crunch", -2.0, 1.5, 0.5, 1.0),
+            ("Margin Erosion", 0.5, 2.5, 0.2, 0.0),
+            ("Operations Bottleneck", -1.0, 1.0, 2.0, -1.5),
+            ("Demand Collapse", -3.0, -0.5, 1.0, 2.5)
+        ]
+        cursor.executemany("""
+            INSERT INTO business_memory (pattern_name, revenue_drift, expenses_drift, tickets_drift, inventory_drift)
+            VALUES (?, ?, ?, ?, ?)
+        """, patterns)
+        conn.commit()
+    conn.close()
+
+def fetch_canary_data():
+    conn = sqlite3.connect(CRM_DB_PATH)
+    cursor = conn.cursor()
+    
+    # Get the max date in support_tickets or deals to align query timeline with DB seed dates
+    cursor.execute("SELECT MAX(opened_date) FROM support_tickets")
+    max_tkt = cursor.fetchone()[0]
+    cursor.execute("SELECT MAX(close_date) FROM deals")
+    max_deal = cursor.fetchone()[0]
+    
+    dates = [d for d in [max_tkt, max_deal] if d]
+    if not dates:
+        anchor_date = datetime.today()
+    else:
+        anchor_date = datetime.strptime(max(dates), "%Y-%m-%d")
+        
+    # Generate dates for 37 days (baseline 30 days + current 7 days)
+    raw_dates = [(anchor_date - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(37)]
+    raw_dates.reverse()
+    
+    # Cache monthly tables to avoid multiple database calls in a loop
+    cursor.execute("SELECT month, revenue FROM financials")
+    financials_map = {r[0]: r[1] for r in cursor.fetchall()}
+    
+    cursor.execute("SELECT month, total FROM expenses")
+    expenses_map = {r[0]: r[1] for r in cursor.fetchall()}
+    
+    # Get total inventory qty (constant across daily checks)
+    cursor.execute("SELECT SUM(qty_on_hand) FROM inventory")
+    total_inventory = cursor.fetchone()[0] or 0
+    
+    daily_metrics = []
+    for date_str in raw_dates:
+        month_str = date_str[:7] # YYYY-MM
+        
+        # 1. Revenue (Monthly revenue divided by 30)
+        rev = financials_map.get(month_str, 850000.0) / 30.0
+        
+        # 2. Expenses (Monthly expenses divided by 30)
+        exp = expenses_map.get(month_str, 250000.0) / 30.0
+        
+        # 3. Support Tickets (Daily count)
+        cursor.execute("SELECT COUNT(*) FROM support_tickets WHERE opened_date = ?", (date_str,))
+        tkt_count = cursor.fetchone()[0] or 0
+        
+        daily_metrics.append({
+            "revenue": rev,
+            "expenses": exp,
+            "tickets": tkt_count,
+            "inventory": total_inventory
+        })
+        
+    conn.close()
+    return daily_metrics
+
+@app.post("/api/canary-run")
+async def canary_run():
+    # 1. Initialize and seed patterns DB if not present
+    init_business_memory()
+    
+    # 2. Fetch daily metric timelines (last 37 days)
+    try:
+        daily_metrics = fetch_canary_data()
+    except Exception as e:
+        return {"error": f"Failed to retrieve database metrics: {str(e)}"}
+        
+    baseline_data = daily_metrics[:30]
+    current_data = daily_metrics[30:]
+    
+    # Extract baseline and current arrays
+    b_rev = [d["revenue"] for d in baseline_data]
+    c_rev = [d["revenue"] for d in current_data]
+    
+    b_exp = [d["expenses"] for d in baseline_data]
+    c_exp = [d["expenses"] for d in current_data]
+    
+    b_tkt = [d["tickets"] for d in baseline_data]
+    c_tkt = [d["tickets"] for d in current_data]
+    
+    b_inv = [d["inventory"] for d in baseline_data]
+    c_inv = [d["inventory"] for d in current_data]
+    
+    # Calculate statistical drifts
+    drift_rev, pct_rev = calculate_drift(c_rev, b_rev)
+    drift_exp, pct_exp = calculate_drift(c_exp, b_exp)
+    drift_tkt, pct_tkt = calculate_drift(c_tkt, b_tkt)
+    drift_inv, pct_inv = calculate_drift(c_inv, b_inv)
+    
+    drift_vector = [drift_rev, drift_exp, drift_tkt, drift_inv]
+    
+    # Load historical failure signatures
+    conn = sqlite3.connect(CRM_DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT pattern_name, revenue_drift, expenses_drift, tickets_drift, inventory_drift FROM business_memory")
+    rows = cursor.fetchall()
+    conn.close()
+    
+    patterns = [(r[0], [r[1], r[2], r[3], r[4]]) for r in rows]
+    
+    # Run Canary Analysis using module
+    analysis = run_canary_analysis(drift_vector, patterns)
+    
+    return {
+        "alert": analysis["alert"],
+        "matched_pattern": analysis["matched_pattern"],
+        "similarity": analysis["similarity"],
+        "all_scores": analysis["all_scores"],
+        "drift_percentages": {
+            "revenue": pct_rev,
+            "revenue_z": drift_rev,
+            "expenses": pct_exp,
+            "expenses_z": drift_exp,
+            "tickets": pct_tkt,
+            "tickets_z": drift_tkt,
+            "inventory": pct_inv,
+            "inventory_z": drift_inv
+        }
+    }
+
+
+def get_crm_dashboard_data(days: int = 30):
+    conn = sqlite3.connect(CRM_DB_PATH)
+    cursor = conn.cursor()
+    
+    # Get max date from DB to align query timeline with active ticket dates
+    cursor.execute("SELECT MAX(opened_date) FROM support_tickets")
+    max_tkt = cursor.fetchone()[0]
+    if not max_tkt:
+        anchor_date = datetime.today()
+    else:
+        anchor_date = datetime.strptime(max_tkt, "%Y-%m-%d")
+        
+    start_date = anchor_date - timedelta(days=days - 1)
+    
+    # Generate daily chronological list of date strings
+    date_list = [(start_date + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(days)]
+    
+    # 1. Fetch daily closed-won deal revenues
+    cursor.execute("""
+        SELECT close_date, SUM(value) 
+        FROM deals 
+        WHERE stage = 'Closed-Won' AND close_date BETWEEN ? AND ?
+        GROUP BY close_date
+    """, (date_list[0], date_list[-1]))
+    revenue_map = {r[0]: r[1] for r in cursor.fetchall()}
+    
+    # 2. Fetch monthly expenses
+    cursor.execute("SELECT month, total FROM expenses")
+    expenses_map = {r[0]: r[1] for r in cursor.fetchall()}
+    
+    # 3. Fetch daily support ticket counts
+    cursor.execute("""
+        SELECT opened_date, COUNT(*) 
+        FROM support_tickets 
+        WHERE opened_date BETWEEN ? AND ?
+        GROUP BY opened_date
+    """, (date_list[0], date_list[-1]))
+    tickets_map = {r[0]: r[1] for r in cursor.fetchall()}
+    
+    # 4. Fetch customer segment breakdown (Closed-Won revenue)
+    cursor.execute("""
+        SELECT c.segment, SUM(d.value) 
+        FROM deals d 
+        JOIN customers c ON d.customer_id = c.id 
+        WHERE d.stage = 'Closed-Won' AND d.close_date BETWEEN ? AND ?
+        GROUP BY c.segment
+    """, (date_list[0], date_list[-1]))
+    segment_revenue = {r[0]: r[1] or 0 for r in cursor.fetchall()}
+    
+    # 5. Fetch current inventory level
+    cursor.execute("SELECT SUM(qty_on_hand) FROM inventory")
+    current_inventory = cursor.fetchone()[0] or 0
+    
+    daily_records = []
+    total_revenue = 0.0
+    total_expenses = 0.0
+    total_tickets = 0
+    
+    for date_str in date_list:
+        month_str = date_str[:7]
+        
+        rev = revenue_map.get(date_str, 0.0)
+        exp = expenses_map.get(month_str, 250000.0) / 30.0
+        tkt = tickets_map.get(date_str, 0)
+        
+        daily_records.append({
+            "date": date_str,
+            "revenue": round(rev, 2),
+            "expenses": round(exp, 2),
+            "tickets": tkt
+        })
+        
+        total_revenue += rev
+        total_expenses += exp
+        total_tickets += tkt
+        
+    avg_daily_tickets = round(total_tickets / days, 1)
+    conn.close()
+    
+    return {
+        "kpis": {
+            "total_revenue": round(total_revenue, 2),
+            "total_expenses": round(total_expenses, 2),
+            "avg_daily_tickets": avg_daily_tickets,
+            "current_inventory": current_inventory
+        },
+        "time_series": daily_records,
+        "segments": segment_revenue
+    }
+
+@app.get("/api/crm-data")
+async def get_crm_data_api(days: int = 30):
+    try:
+        data = get_crm_dashboard_data(days)
+    except Exception as e:
+        return {"error": f"Failed to retrieve CRM metrics: {str(e)}"}
+        
+    # Convert segments map to a list of objects {"name", "value"}
+    segments_list = [{"name": k, "value": round(v, 2)} for k, v in data["segments"].items()]
+    if not segments_list:
+        segments_list = [
+            {"name": "Enterprise", "value": 0.0},
+            {"name": "SMB", "value": 0.0},
+            {"name": "Startup", "value": 0.0}
+        ]
+        
+    return {
+        "kpis": {
+            "revenue": data["kpis"]["total_revenue"],
+            "expenses": data["kpis"]["total_expenses"],
+            "tickets": data["kpis"]["avg_daily_tickets"],
+            "inventory": data["kpis"]["current_inventory"]
+        },
+        "history": data["time_series"],
+        "segments": segments_list
     }
 
 

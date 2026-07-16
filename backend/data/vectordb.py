@@ -64,6 +64,67 @@ for entry in KNOWLEDGE:
 
 print(f"[OK] Vector DB loaded with {len(KNOWLEDGE)} CRM knowledge entries.")
 
+# 4.2 Load and index uploaded documents on startup
+UPLOADED_JSON_PATH = os.path.join(os.path.dirname(__file__), "uploaded_docs.json")
+if os.path.exists(UPLOADED_JSON_PATH):
+    try:
+        with open(UPLOADED_JSON_PATH, "r", encoding="utf-8") as f:
+            uploaded_docs = json.load(f)
+            uploaded_chunk_count = 0
+            for doc in uploaded_docs:
+                for chunk in doc.get("chunks", []):
+                    uid = f"{doc['id']}_{chunk['index']}"
+                    embedding = model.encode(chunk["text"]).tolist()
+                    collection.upsert(
+                        ids=[uid],
+                        embeddings=[embedding],
+                        metadatas=[{"text": chunk["text"], "type": "uploaded_document", "filename": doc["filename"]}]
+                    )
+                    uploaded_chunk_count += 1
+            print(f"[OK] Vector DB loaded {uploaded_chunk_count} chunks from {len(uploaded_docs)} uploaded documents.")
+    except Exception as e:
+        print(f"⚠️ Error loading uploaded_docs.json on startup: {e}")
+
+
+def add_document_to_vector_db(text: str, filename: str, doc_id: str) -> list:
+    """
+    Chunks text, encodes each chunk, and inserts it into Chroma.
+    Returns: list of string chunks.
+    """
+    chunks = []
+    chunk_size = 1000
+    overlap = 200
+    start = 0
+    text_len = len(text)
+    while start < text_len:
+        end = min(start + chunk_size, text_len)
+        chunks.append(text[start:end])
+        if end == text_len:
+            break
+        start += chunk_size - overlap
+
+    for i, chunk in enumerate(chunks):
+        uid = f"{doc_id}_{i}"
+        embedding = model.encode(chunk).tolist()
+        collection.upsert(
+            ids=[uid],
+            embeddings=[embedding],
+            metadatas=[{"text": chunk, "type": "uploaded_document", "filename": filename}]
+        )
+    return chunks
+
+
+def remove_document_from_vector_db(doc_id: str, chunks_count: int):
+    """
+    Deletes document chunks from Chroma.
+    """
+    ids = [f"{doc_id}_{i}" for i in range(chunks_count)]
+    try:
+        collection.delete(ids=ids)
+    except Exception as e:
+        print(f"⚠️ Error removing document {doc_id} from vector store: {e}")
+
+
 
 def retrieve_memory(query_text: str, top_k: int = 3) -> tuple:
     """

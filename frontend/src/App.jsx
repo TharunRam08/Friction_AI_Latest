@@ -10,6 +10,7 @@ import {
   Package, Archive, HelpCircle, Truck, CreditCard, Activity,
   Menu
 } from 'lucide-react';
+import CRMDashboard from './CRMDashboard';
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -1592,6 +1593,220 @@ function RichOutputCard({ result }) {
 }// ══════════════════════════════════════════════════════════════════════════════
 //  PIPELINE STEP CONFIG (16 modules from the PDF)
 // ══════════════════════════════════════════════════════════════════════════════
+function UploadModal({ onClose, onUploadSuccess }) {
+  const [file, setFile] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      validateAndSetFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files[0]) {
+      validateAndSetFile(e.target.files[0]);
+    }
+  };
+
+  const validateAndSetFile = (selectedFile) => {
+    setError(null);
+    const allowedExtensions = ['.pdf', '.xlsx', '.xls', '.csv', '.txt', '.md', '.json'];
+    const filename = selectedFile.name.toLowerCase();
+    const isValid = allowedExtensions.some(ext => filename.endsWith(ext));
+    
+    if (!isValid) {
+      setError("Unsupported file format. Please upload PDF, Excel, CSV, text, or markdown files.");
+      setFile(null);
+      return;
+    }
+    
+    if (selectedFile.size > 20 * 1024 * 1024) {
+      setError("File size exceeds 20MB limit.");
+      setFile(null);
+      return;
+    }
+    
+    setFile(selectedFile);
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await axios.post(`${API}/upload-document`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if (res.data.success) {
+        setSuccess(true);
+        if (onUploadSuccess) onUploadSuccess();
+        setTimeout(() => {
+          onClose();
+        }, 1200);
+      } else {
+        setError(res.data.error || 'Failed to upload document.');
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to connect to backend server. Make sure the server is running.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const onButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 backdrop-blur-md p-4">
+      <div 
+        className="w-full max-w-md bg-[#111113] border border-[#1e1e22] rounded-2xl overflow-hidden shadow-2xl flex flex-col relative transition-all duration-300"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="h-14 border-b border-[#1c1c1f] px-6 flex items-center justify-between bg-[#131315]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center">
+              <Plus className="w-4 h-4 text-blue-400" />
+            </div>
+            <span className="text-[13px] font-bold text-white uppercase tracking-wide">Connect Custom Data Source</span>
+          </div>
+          <button 
+            onClick={onClose} 
+            disabled={uploading}
+            className="w-7 h-7 rounded-lg bg-[#181819] border border-[#2a2a2f] flex items-center justify-center hover:bg-zinc-800 hover:border-zinc-600 transition disabled:opacity-40"
+          >
+            <X className="w-3.5 h-3.5 text-zinc-400" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 space-y-5">
+          <p className="text-[11.5px] text-zinc-500 leading-relaxed">
+            Upload custom reports, worksheets, or documentation files. They will be parsed, cleaned, chunked, and embedded into the active Chroma vector store to augment the cognitive RAG decision engine.
+          </p>
+
+          {/* Drag & Drop Zone */}
+          <div 
+            onDragEnter={handleDrag}
+            onDragOver={handleDrag}
+            onDragLeave={handleDrag}
+            onDrop={handleDrop}
+            className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200 min-h-[170px] ${
+              dragActive 
+                ? 'border-blue-500 bg-blue-600/5' 
+                : file 
+                  ? 'border-emerald-600/50 bg-emerald-950/5' 
+                  : 'border-[#222225] hover:border-zinc-700 bg-[#0c0c0d]'
+            }`}
+            onClick={onButtonClick}
+          >
+            <input 
+              ref={fileInputRef}
+              type="file" 
+              className="hidden" 
+              accept=".pdf,.xlsx,.xls,.csv,.txt,.md,.json"
+              onChange={handleChange}
+              disabled={uploading || success}
+            />
+
+            {success ? (
+              <div className="flex flex-col items-center space-y-2.5">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.1)]">
+                  <Check className="w-5 h-5 text-emerald-400 stroke-[3]" />
+                </div>
+                <div className="space-y-0.5">
+                  <div className="text-[12.5px] font-bold text-white">Success! Source Connected</div>
+                  <div className="text-[10px] text-zinc-550">Embedding index updated successfully</div>
+                </div>
+              </div>
+            ) : uploading ? (
+              <div className="flex flex-col items-center space-y-3">
+                <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                <div className="space-y-0.5">
+                  <div className="text-[12px] font-bold text-zinc-300">Parsing & Cleaning Data...</div>
+                  <div className="text-[10px] text-zinc-555">Storing vector chunks in Chroma DB</div>
+                </div>
+              </div>
+            ) : file ? (
+              <div className="flex flex-col items-center space-y-2.5">
+                <div className="w-10 h-10 rounded-xl bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div className="max-w-[280px]">
+                  <div className="text-[12.5px] font-bold text-zinc-200 truncate" title={file.name}>{file.name}</div>
+                  <div className="text-[10px] text-zinc-500 font-mono mt-0.5">{(file.size / 1024).toFixed(1)} KB</div>
+                </div>
+                <button 
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); setFile(null); }}
+                  className="text-[9.5px] font-bold text-zinc-500 hover:text-red-400 uppercase tracking-wider underline transition"
+                >
+                  Remove File
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center space-y-2.5">
+                <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-[#222225] flex items-center justify-center text-zinc-500">
+                  <Plus className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-[12px] font-semibold text-zinc-300 block">Drag & drop your file here</span>
+                  <span className="text-[10px] text-zinc-500 mt-1 block">or click to browse from device</span>
+                </div>
+                <div className="text-[9px] text-zinc-650 font-medium tracking-wide uppercase mt-1">
+                  PDF, Excel, CSV, TXT, MD (Max 20MB)
+                </div>
+              </div>
+            )}
+          </div>
+
+          {error && (
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-red-950/20 border border-red-900/30 text-red-400">
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <p className="text-[11px] leading-relaxed font-medium">{error}</p>
+            </div>
+          )}
+
+          {file && !uploading && !success && (
+            <button
+              onClick={handleUpload}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-[12px] font-bold uppercase tracking-wider shadow-lg shadow-blue-600/10 hover:shadow-blue-500/20 transition-all duration-200"
+            >
+              <Zap className="w-4 h-4 fill-current stroke-none" />
+              Upload and Index source
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const ALL_PIPELINE_STEPS = [
   { label: 'Intent',         group: 'Understand', icon: Brain },
   { label: 'Friction',       group: 'Understand', icon: Zap },
@@ -1632,7 +1847,28 @@ function App() {
   const [sourcesLoading, setSrcLoading] = useState(true);
   const [activeSource, setActiveSource] = useState(null);
   const [currentPage, setCurrentPage]   = useState('dashboard');
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [canaryResult, setCanaryResult] = useState(null);
+  const [canaryLoading, setCanaryLoading] = useState(false);
+  const [canaryError, setCanaryError] = useState(null);
   const messagesEndRef = useRef(null);
+
+  const handleCanaryScan = async () => {
+    setCanaryLoading(true);
+    setCanaryError(null);
+    try {
+      const res = await axios.post(`${API}/api/canary-run`);
+      if (res.data.error) {
+        setCanaryError(res.data.error);
+      } else {
+        setCanaryResult(res.data);
+      }
+    } catch (err) {
+      setCanaryError(err.response?.data?.error || "Failed to connect to backend server. Make sure the FastAPI backend is running.");
+    } finally {
+      setCanaryLoading(false);
+    }
+  };
 
   // Fetch data sources on mount
   useEffect(() => {
@@ -1790,6 +2026,11 @@ function App() {
               <Sparkles className="w-3.5 h-3.5 text-zinc-500" />
               <span>Decision Dashboard</span>
             </button>
+            <button onClick={() => { setCurrentPage('crm'); if (isMobileDrawer) setMobileDrawerOpen(false); }}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-[11.5px] font-semibold transition-all text-left ${currentPage === 'crm' ? 'bg-[#161617] border-[#232325] text-white' : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-[#161618]/50'}`}>
+              <TrendingUp className="w-3.5 h-3.5 text-zinc-500" />
+              <span>Live CRM</span>
+            </button>
             <button onClick={() => { setCurrentPage('architecture'); if (isMobileDrawer) setMobileDrawerOpen(false); }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-[11.5px] font-semibold transition-all text-left ${currentPage === 'architecture' ? 'bg-[#161617] border-[#232325] text-white' : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-[#161618]/50'}`}>
               <GitBranch className="w-3.5 h-3.5 text-zinc-500" />
@@ -1807,28 +2048,54 @@ function App() {
               }
             </div>
             <ul className="space-y-1">
-              {dataSources.map(src => (
-                <li key={src.id}>
-                  <button onClick={() => { setActiveSource(src); if (isMobileDrawer) setMobileDrawerOpen(false); }}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent hover:bg-[#161618] hover:border-[#222224] transition-all group text-left">
-                    <div className="w-7 h-7 rounded-lg bg-[#1a1a1c] group-hover:bg-[#1e1e21] flex items-center justify-center flex-shrink-0 transition">
-                      <SrcIcon name={src.icon} className="w-3.5 h-3.5 text-zinc-500 group-hover:text-blue-400 transition" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[12px] font-semibold text-zinc-400 group-hover:text-white transition">{src.label}</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] font-mono text-zinc-600">{src.row_count}</span>
-                          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_5px_#10b981]" />
-                        </div>
+              {dataSources.map(src => {
+                const isUploaded = src.id.startsWith('uploaded_');
+                return (
+                  <li key={src.id} className="relative group/item">
+                    <button onClick={() => { setActiveSource(src); if (isMobileDrawer) setMobileDrawerOpen(false); }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent hover:bg-[#161618] hover:border-[#222224] transition-all text-left ${isUploaded ? 'pr-9' : ''}`}>
+                      <div className="w-7 h-7 rounded-lg bg-[#1a1a1c] group-hover:bg-[#1e1e21] flex items-center justify-center flex-shrink-0 transition">
+                        <SrcIcon name={src.icon} className="w-3.5 h-3.5 text-zinc-500 group-hover:text-blue-400 transition" />
                       </div>
-                      <div className="text-[10px] text-zinc-700 truncate mt-0.5">{src.summary}</div>
-                    </div>
-                  </button>
-                </li>
-              ))}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[12px] font-semibold text-zinc-400 group-hover:text-white transition truncate pr-1">{src.label}</span>
+                          <div className="flex items-center gap-1.5 flex-shrink-0">
+                            <span className="text-[10px] font-mono text-zinc-600">{src.row_count}</span>
+                            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_5px_#10b981]" />
+                          </div>
+                        </div>
+                        <div className="text-[10px] text-zinc-700 truncate mt-0.5">{src.summary}</div>
+                      </div>
+                    </button>
+                    
+                    {isUploaded && (
+                      <button
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (window.confirm(`Are you sure you want to disconnect ${src.label}?`)) {
+                            try {
+                              await axios.delete(`${API}/upload-document/${src.id}`);
+                              fetchDataSources();
+                            } catch (err) {
+                              alert("Failed to delete document.");
+                            }
+                          }
+                        }}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 opacity-0 group-hover/item:opacity-100 p-1.5 rounded-lg bg-red-950/20 border border-red-900/30 text-red-400 hover:bg-red-900/40 hover:text-red-300 transition-all z-10"
+                        title="Disconnect data source"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
-            <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-transparent border border-[#1e1e21] hover:border-zinc-700 hover:bg-[#161618] text-zinc-600 hover:text-zinc-300 rounded-xl text-[11px] font-semibold tracking-wide transition">
+            <button 
+              onClick={() => { setShowUploadModal(true); if (isMobileDrawer) setMobileDrawerOpen(false); }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-transparent border border-[#1e1e21] hover:border-zinc-700 hover:bg-[#161618] text-zinc-600 hover:text-zinc-300 rounded-xl text-[11px] font-semibold tracking-wide transition"
+            >
               <Plus className="w-3.5 h-3.5" />Connect source
             </button>
           </div>
@@ -1901,6 +2168,9 @@ function App() {
       {/* ═══════ DATA VIEWER MODAL ═══════ */}
       {activeSource && <DataViewer source={activeSource} onClose={() => setActiveSource(null)} />}
 
+      {/* ═══════ UPLOAD SOURCE MODAL ═══════ */}
+      {showUploadModal && <UploadModal onClose={() => setShowUploadModal(false)} onUploadSuccess={fetchDataSources} />}
+
       {/* Mobile Drawer Overlay */}
       {mobileDrawerOpen && (
         <div className="fixed inset-0 z-[80] flex md:hidden">
@@ -1939,19 +2209,150 @@ function App() {
               {messages.length > 0 ? 'Active Session' : 'New Reasoning Session'}
             </span>
           </div>
-          {isSidebarOpen && (
-            <button onClick={() => setSidebar(false)}
-              className="hidden md:block text-zinc-600 hover:text-zinc-300 text-xs font-medium px-2.5 py-1 rounded bg-[#161617] border border-[#232325] transition">
-              Hide Sidebar
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            {currentPage === 'dashboard' && (
+              <button
+                onClick={handleCanaryScan}
+                disabled={canaryLoading}
+                className="text-zinc-350 hover:text-white text-[11px] font-bold px-3 py-1.5 rounded-lg bg-[#161617] hover:bg-[#1f1f23] border border-[#232325] transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+              >
+                {canaryLoading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-yellow-500" />
+                    <span>Scanning...</span>
+                  </>
+                ) : (
+                  <>
+                    <Shield className="w-3.5 h-3.5 text-yellow-500" />
+                    <span>Run Canary Scan</span>
+                  </>
+                )}
+              </button>
+            )}
+            {isSidebarOpen && (
+              <button onClick={() => setSidebar(false)}
+                className="hidden md:block text-zinc-600 hover:text-zinc-300 text-xs font-medium px-2.5 py-1.5 rounded bg-[#161617] border border-[#232325] transition">
+                Hide Sidebar
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Content Tab Router */}
         {currentPage === 'architecture' ? (
           <ArchitecturePage />
+        ) : currentPage === 'crm' ? (
+          <CRMDashboard API={API} />
         ) : (
           <div className="flex-1 overflow-y-auto px-4 sm:px-8 pt-6 pb-28 md:pb-6 space-y-8 max-w-4xl w-full mx-auto flex flex-col">
+
+            {/* ── CANARY ANOMALY ENGINE RESULTS ── */}
+            {(canaryResult || canaryError) && (
+              <div className="bg-[#111213] border border-[#1e1e22] rounded-xl overflow-hidden mt-4">
+                <div className="px-5 py-3 border-b border-[#1e1e22] bg-[#111213] flex items-center gap-2.5">
+                  <Shield className="w-4 h-4 text-yellow-500" />
+                  <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-wide">Proactive Canary Guard Results</span>
+                </div>
+                <div className="p-5 bg-[#0a0a0b] space-y-4">
+                  {canaryError && (
+                    <div className="flex items-start gap-2.5 p-3 rounded-xl bg-red-950/20 border border-red-900/30 text-red-400 text-xs">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                      <span>{canaryError}</span>
+                    </div>
+                  )}
+
+                  {canaryResult && (
+                    <div className="space-y-4">
+                      {/* Status Alert */}
+                      {canaryResult.alert ? (
+                        <div className="flex items-start gap-3 p-4 rounded-xl bg-red-950/30 border border-red-900/40 text-red-400 animate-pulse">
+                          <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <h4 className="text-[13px] font-bold uppercase tracking-wide">Critical Anomaly Detected!</h4>
+                            <p className="text-[11.5px] mt-1 leading-relaxed">
+                              Operational drift matches <strong>{canaryResult.matched_pattern}</strong> with <strong>{canaryResult.similarity}%</strong> confidence. Proactive mitigation is recommended.
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-950/20 border border-emerald-900/30 text-emerald-450">
+                          <Check className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                          <div>
+                            <h4 className="text-[13px] font-bold uppercase tracking-wide">Operational State Safe</h4>
+                            <p className="text-[11.5px] mt-1 leading-relaxed">
+                              No critical systemic drift detected. Signature correlation is low (Highest match: {canaryResult.matched_pattern} at {canaryResult.similarity}%).
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Collapsible Details */}
+                      <details className="group border border-[#1e1e22] rounded-xl bg-[#111213] overflow-hidden transition-all duration-200">
+                        <summary className="list-none flex items-center justify-between px-4 py-3 cursor-pointer select-none hover:bg-[#161619] transition">
+                          <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+                            <span>🔬 View Raw Math & Projections</span>
+                          </span>
+                          <ChevronDown className="w-3.5 h-3.5 text-zinc-500 group-open:rotate-180 transition-transform duration-200" />
+                        </summary>
+                        <div className="p-4 border-t border-[#1e1e22] bg-[#0a0a0b] space-y-4">
+                          {/* Drift Z-Scores */}
+                          <div className="space-y-2">
+                            <span className="text-[9.5px] font-bold text-zinc-550 uppercase tracking-widest block">Drift Vector (Z-Scores vs. Baseline)</span>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                              {[
+                                { label: "Revenue", key: "revenue" },
+                                { label: "Expenses", key: "expenses" },
+                                { label: "Tickets", key: "tickets" },
+                                { label: "Inventory", key: "inventory" }
+                              ].map(item => {
+                                const drift = canaryResult.drift_percentages?.[item.key] || 0;
+                                const zscore = canaryResult.drift_percentages?.[item.key + "_z"] || 0;
+                                const isPositive = zscore >= 0;
+                                return (
+                                  <div key={item.key} className="bg-[#161617] border border-[#232325] px-3 py-2.5 rounded-lg flex flex-col justify-between">
+                                    <span className="text-[10px] text-zinc-550 font-semibold">{item.label}</span>
+                                    <span className="text-[14px] font-mono font-bold text-white mt-1.5">{zscore.toFixed(3)} σ</span>
+                                    <span className={`text-[9.5px] font-bold mt-1 font-mono ${isPositive ? 'text-emerald-450' : 'text-rose-450'}`}>
+                                      {isPositive ? '+' : ''}{drift.toFixed(1)}% drift
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Similarity Correlation Scores */}
+                          <div className="space-y-2 pt-2">
+                            <span className="text-[9.5px] font-bold text-zinc-555 uppercase tracking-widest block">Signature Match Correlation</span>
+                            <div className="space-y-2.5">
+                              {Object.entries(canaryResult.all_scores || {}).map(([name, score]) => {
+                                const scoreVal = Number(score);
+                                return (
+                                  <div key={name} className="space-y-1">
+                                    <div className="flex justify-between text-[11px] font-medium pl-0.5">
+                                      <span className="text-zinc-450">{name}</span>
+                                      <span className="text-zinc-200 font-mono font-bold">{scoreVal.toFixed(1)}%</span>
+                                    </div>
+                                    <div className="h-1.5 w-full bg-[#161617] rounded-full overflow-hidden border border-[#232325]">
+                                      <div 
+                                        className={`h-full rounded-full transition-all duration-500 ${
+                                          scoreVal >= 85 ? 'bg-[#ef4444]' : scoreVal >= 50 ? 'bg-[#f59e0b]' : 'bg-[#3b82f6]'
+                                        }`}
+                                        style={{ width: `${Math.max(0, Math.min(100, scoreVal))}%` }}
+                                      />
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </details>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {messages.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center py-16 space-y-6">

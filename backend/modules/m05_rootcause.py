@@ -5,6 +5,7 @@ Builds a cause chain to identify WHY a problem exists or WHY a decision matters.
 Not just: "Revenue is down" — but the full chain: Why → Why → Why
 """
 import json
+import os
 
 def find_root_cause(question: str, context_snapshot: str, client) -> dict:
     system = """You are a root cause analysis engine for a business AI.
@@ -29,7 +30,7 @@ Return ONLY valid JSON:
             {"role": "system", "content": system},
             {"role": "user", "content": f'Business Question: "{question}"\n\nCurrent Business Context:\n{context_snapshot}'}
         ],
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         response_format={"type": "json_object"},
         temperature=0.2,
     )

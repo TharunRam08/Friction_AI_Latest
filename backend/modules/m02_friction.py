@@ -7,6 +7,7 @@ MEDIUM → Tactical decisions, moderate impact (9 steps)
 HIGH   → Strategic decisions, major impact (full 16 steps)
 """
 import json
+import os
 
 def get_friction_level(question: str, intent: dict, client) -> dict:
     system = """You are a business decision complexity classifier for the Friction AI engine.
@@ -28,7 +29,7 @@ Return ONLY valid JSON:
     resp = client.chat.completions.create(
         messages=[{"role": "system", "content": system},
                   {"role": "user", "content": f'Question: "{question}"\nIntent: {json.dumps(intent)}'}],
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         response_format={"type": "json_object"},
         temperature=0.1,
     )

@@ -1,0 +1,31 @@
+[
+  {
+    "id": "uploaded_enterprisedatasetlast30days_1784239706",
+    "filename": "Enterprise Dataset (Last 30 Days).xlsx",
+    "file_type": "XLSX",
+    "size_bytes": 10117,
+    "summary": "XLSX File • 4 text chunks indexed",
+    "tags": [
+      "Uploaded",
+      "XLSX"
+    ],
+    "chunks": [
+      {
+        "index": 0,
+        "text": "Sheet: Sheet1\nRow 1: Col 1: Date, Col 2: Revenue (USD), Col 3: Inventory Levels (Units), Col 4: Support Tickets (Spikes), Col 5: Expenses (USD)\nRow 2: Col 1: 2026-06-17 00:00:00, Col 2: 12000, Col 3: 850, Col 4: 12, Col 5: 4000\nRow 3: Col 1: 2026-06-18 00:00:00, Col 2: 12500, Col 3: 840, Col 4: 14, Col 5: 4100\nRow 4: Col 1: 2026-06-19 00:00:00, Col 2: 11800, Col 3: 830, Col 4: 15, Col 5: 3950\nRow 5: Col 1: 2026-06-20 00:00:00, Col 2: 9000, Col 3: 825, Col 4: 9, Col 5: 4200\nRow 6: Col 1: 2026-06-21 00:00:00, Col 2: 8500, Col 3: 820, Col 4: 11, Col 5: 4300\nRow 7: Col 1: 2026-06-22 00:00:00, Col 2: 13000, Col 3: 810, Col 4: 16, Col 5: 4050\nRow 8: Col 1: 2026-06-23 00:00:00, Col 2: 12800, Col 3: 800, Col 4: 13, Col 5: 4120\nRow 9: Col 1: 2026-06-24 00:00:00, Col 2: 12200, Col 3: 790, Col 4: 14, Col 5: 4000\nRow 10: Col 1: 2026-06-25 00:00:00, Col 2: 12400, Col 3: 780, Col 4: 12, Col 5: 3980\nRow 11: Col 1: 2026-06-26 00:00:00, Col 2: 11900, Col 3: 775, Col 4: 18, Col 5: 4050\nRow 12: Col 1: 20"
+      },
+      {
+        "index": 1,
+        "text": " Col 5: 4000\nRow 10: Col 1: 2026-06-25 00:00:00, Col 2: 12400, Col 3: 780, Col 4: 12, Col 5: 3980\nRow 11: Col 1: 2026-06-26 00:00:00, Col 2: 11900, Col 3: 775, Col 4: 18, Col 5: 4050\nRow 12: Col 1: 2026-06-27 00:00:00, Col 2: 9500, Col 3: 770, Col 4: 10, Col 5: 4100\nRow 13: Col 1: 2026-06-28 00:00:00, Col 2: 8800, Col 3: 765, Col 4: 8, Col 5: 4150\nRow 14: Col 1: 2026-06-29 00:00:00, Col 2: 13400, Col 3: 750, Col 4: 15, Col 5: 4200\nRow 15: Col 1: 2026-06-30 00:00:00, Col 2: 13100, Col 3: 740, Col 4: 11, Col 5: 4110\nRow 16: Col 1: 2026-07-01 00:00:00, Col 2: 12900, Col 3: 730, Col 4: 13, Col 5: 4080\nRow 17: Col 1: 2026-07-02 00:00:00, Col 2: 12600, Col 3: 720, Col 4: 14, Col 5: 4150\nRow 18: Col 1: 2026-07-03 00:00:00, Col 2: 12800, Col 3: 715, Col 4: 16, Col 5: 4220\nRow 19: Col 1: 2026-07-04 00:00:00, Col 2: 9200, Col 3: 710, Col 4: 9, Col 5: 4300\nRow 20: Col 1: 2026-07-05 00:00:00, Col 2: 8900, Col 3: 705, Col 4: 7, Col 5: 4250\nRow 21: Col 1: 2026-07-06 00:00:00, Col 2: 13800, Col 3: 69"
+      },
+      {
+        "index": 2,
+        "text": " 00:00:00, Col 2: 9200, Col 3: 710, Col 4: 9, Col 5: 4300\nRow 20: Col 1: 2026-07-05 00:00:00, Col 2: 8900, Col 3: 705, Col 4: 7, Col 5: 4250\nRow 21: Col 1: 2026-07-06 00:00:00, Col 2: 13800, Col 3: 690, Col 4: 12, Col 5: 4180\nRow 22: Col 1: 2026-07-07 00:00:00, Col 2: 13500, Col 3: 680, Col 4: 15, Col 5: 4200\nRow 23: Col 1: 2026-07-08 00:00:00, Col 2: 13200, Col 3: 670, Col 4: 14, Col 5: 4250\nRow 24: Col 1: 2026-07-09 00:00:00, Col 2: 12900, Col 3: 660, Col 4: 13, Col 5: 4190\nRow 25: Col 1: 2026-07-10 00:00:00, Col 2: 12100, Col 3: 650, Col 4: 17, Col 5: 4300\nRow 26: Col 1: 2026-07-11 00:00:00, Col 2: 6200, Col 3: 410, Col 4: 45, Col 5: 8900\nRow 27: Col 1: 2026-07-12 00:00:00, Col 2: 5800, Col 3: 380, Col 4: 48, Col 5: 9200\nRow 28: Col 1: 2026-07-13 00:00:00, Col 2: 5500, Col 3: 350, Col 4: 52, Col 5: 9500\nRow 29: Col 1: 2026-07-14 00:00:00, Col 2: 5100, Col 3: 320, Col 4: 58, Col 5: 9800\nRow 30: Col 1: 2026-07-15 00:00:00, Col 2: 4800, Col 3: 290, Col 4: 62, Col 5: 10200\nRow 31: Col 1"
+      },
+      {
+        "index": 3,
+        "text": ": 52, Col 5: 9500\nRow 29: Col 1: 2026-07-14 00:00:00, Col 2: 5100, Col 3: 320, Col 4: 58, Col 5: 9800\nRow 30: Col 1: 2026-07-15 00:00:00, Col 2: 4800, Col 3: 290, Col 4: 62, Col 5: 10200\nRow 31: Col 1: 2026-07-16 00:00:00, Col 2: 4500, Col 3: 260, Col 4: 65"
+      }
+    ]
+  }
+]

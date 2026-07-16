@@ -1,5 +1,6 @@
 # backend/modules/m01_intent.py
 import json
+import os
 
 def get_intent(question: str, client) -> dict:
     prompt = f"""
@@ -15,7 +16,7 @@ def get_intent(question: str, client) -> dict:
                 "content": prompt,
             }
         ],
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
         response_format={"type": "json_object"},
         temperature=0.1,
     )
