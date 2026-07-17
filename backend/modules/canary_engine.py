@@ -7,18 +7,16 @@ from datetime import datetime, timedelta
 import sqlite3
 import traceback
 import os
-import google.generativeai as genai
+from groq import Groq
 
 from data.canary_db import (
     get_canary_config, update_canary_config, log_canary_run,
     get_failure_library, add_canary_alert, get_checkpoint, update_checkpoint, get_conn
 )
 
-# Initialize Gemini Client (for structured description generation when anomaly threshold is crossed)
-# Reads API key from environment variable
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+# Initialize Groq client
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 class CanaryEngine:
     _instance = None
@@ -229,29 +227,38 @@ class CanaryEngine:
         }
 
         if fired:
-            # Generate risk statement using Gemini or fallback plain text
+            # Generate risk statement using Groq or fallback plain text
             headline = f"Canary detected potential risk pattern of {severity} severity."
             evidence = json.dumps(current_metrics)
             
-            if GEMINI_API_KEY:
+            if groq_client:
                 try:
-                    model = genai.GenerativeModel("gemini-1.5-flash")
                     prompt = (
-                        f"You are the Canary proactive risk monitoring module in Friction AI. "
-                        f"A statistical analysis flagged a business anomaly.\n"
+                        f"You are the Canary proactive risk watchdog module in Friction AI. "
+                        f"A statistical scan flagged a potential business threat.\n"
                         f"Current metrics: {current_metrics}\n"
                         f"Baselines: {baselines}\n"
-                        f"Aggregate Z-score: {aggregate_score}\n"
+                        f"Aggregate Z-score: {aggregate_score:.2f}\n"
                         f"Detected Mode: {mode}\n"
-                        f"Write one clear, professional, punchy business-owner risk statement (1 sentence) summarizing the risk. "
-                        f"Do not include greeting or pleasantries."
+                        f"Write one single, extremely clear, simple, and friendly English sentence that a business owner would instantly understand. "
+                        f"Explain the risk in plain English based on the metrics (e.g. inventory is too low while customer support tickets are piling up). "
+                        f"Do not use complex jargon, and do not include introductions, greetings, or prefixes like 'Here is your headline'."
                     )
-                    response = model.generate_content(prompt)
-                    headline = response.text.strip()
+                    chat_completion = groq_client.chat.completions.create(
+                        messages=[
+                            {
+                                "role": "user",
+                                "content": prompt,
+                            }
+                        ],
+                        model="llama-3.3-70b-versatile",
+                        temperature=0.3,
+                    )
+                    headline = chat_completion.choices[0].message.content.strip().strip('"')
                 except Exception as e:
-                    headline = f"Potential profit decline linked to safety stock depletion ({qty_on_hand:.0f} units) and rising support load ({recent_daily_avg_tickets:.1f} tickets/day)."
+                    headline = f"Alert: Low stock alert ({qty_on_hand:.0f} units left) paired with high customer ticket volumes ({recent_daily_avg_tickets:.1f} per day)."
             else:
-                headline = f"Potential profit decline linked to safety stock depletion ({qty_on_hand:.0f} units) and rising support load ({recent_daily_avg_tickets:.1f} tickets/day)."
+                headline = f"Alert: Low stock alert ({qty_on_hand:.0f} units left) paired with high customer ticket volumes ({recent_daily_avg_tickets:.1f} per day)."
 
             # Add to alerts table
             add_canary_alert(headline, evidence, severity, mode, datetime.now().isoformat())
