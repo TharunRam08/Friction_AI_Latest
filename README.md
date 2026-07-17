@@ -2,13 +2,13 @@
 
 Friction is an enterprise-grade, board-level cognitive reasoning advisor designed to help business owners resolve complex operational tensions. Instead of responding with generic answers, it analyzes live CRM data, simulates scenarios, debates stances across departments, and resolves decisions against strict operational constraints.
 
-The engine uses a resilient pipeline leveraging **NVIDIA's Nemotron-3-Ultra-550B** as the primary synthesis engine (for deep cognitive thinking) and automatically falls back to **Groq's Llama 3.3 70B** versatile model if NVIDIA rate limits or worker capacity limits (503 Service Unavailable) are encountered.
+The engine uses a resilient pipeline leveraging **NVIDIA's Nemotron-3-Ultra-550B** as the primary synthesis engine (for deep cognitive thinking) and automatically falls back to **Groq's OpenAI GPT-OSS 120B** (`openai/gpt-oss-120b`) model if NVIDIA rate limits or worker capacity limits (503 Service Unavailable) are encountered.
 
 ---
 
 ## 🏗️ Cognitive Pipeline Architecture
 
-The reasoning process follows a rigorous 5-Phase, 16-Module reasoning structure:
+The reasoning process follows a rigorous 5-Phase, 17-Module reasoning structure:
 
 ```mermaid
 graph TD
@@ -38,14 +38,22 @@ graph TD
     F --> F2[Structured Key Stats cards]
     F --> F3[Decision Verdict & Action Plan]
     F --> F4[Collapsible Deep Trace Audit]
+
+    F4 --> G[Phase 6: MONITOR]
+    G --> G1[Canary Proactive Watchdog Daemon]
 ```
 
 ---
 
 ## ✨ Key Features
 
-1. **Resilient Synthesis Engine**: Streams reasoning content from Nvidia Nemotron-3-Ultra with a strict 60s socket-level timeout. Automatically redirects requests to Groq's Llama 3.3 70B Versatile model on worker exhaust limits.
-2. **13 Integrated CRM Databases**: SQLite database containing seeded, synthetic CRM tables:
+1. **Resilient Synthesis Engine**: Streams reasoning content from Nvidia Nemotron-3-Ultra with a strict 60s socket-level timeout. Automatically redirects requests to Groq's high-capacity **`openai/gpt-oss-120b`** model (with fallback to `llama-3.3-70b-versatile`) on rate/worker exhaust limits.
+2. **Canary Proactive Sentinel (Watchdog)**:
+   - Run-on-timer background thread daemon (intervals of 1 Min / 1 Hour) that monitors live safety stocks, support ticket backlogs, and deal progress.
+   - Computes statistical z-scores (aggregate multi-signal drift) and matches shapes against a database failure library.
+   - Leverages Groq to generate jargon-free, easy-to-understand **Problem** statements and step-by-step **Solution** recommendations for the business owner.
+   - Fully interactive alert feed featuring persistent deactivation toggle controls, live target countdown, threat confidence rating, feedback buttons, and deletion options.
+3. **13 Integrated CRM Databases**: SQLite database containing seeded, synthetic CRM tables:
    - **Customers** (Average LTV, churn risks)
    - **Deals Pipeline** (Open deals value, statuses)
    - **Financials** (18 months MRR, profit margins)
@@ -59,8 +67,8 @@ graph TD
    - **Expenses** (Monthly operational burn)
    - **Quarterly KPIs** (ARR metrics, NPS scores)
    - **Contracts** (Active Arr value, renewals)
-3. **Advanced Data Sources Modal**: Full-screen sidebar viewer in the UI allowing the user to view, filter, and audit live rows from all 13 CRM databases.
-4. **De-congested Spacious Dashboard**:
+4. **Advanced Data Sources Modal**: Full-screen sidebar viewer in the UI allowing the user to view, filter, and audit live rows from all 13 CRM databases.
+5. **De-congested Spacious Dashboard**:
    - Executive Context Narrative explains the business metrics first.
    - Structured Key Stats card strip second.
    - Statistical Logic third.
@@ -97,6 +105,7 @@ Create a `.env` file in the `backend/` root directory and add your API keys:
 ```env
 NVIDIA_API_KEY=nvapi-your-nvidia-key-here
 GROQ_API_KEY=gsk_your-groq-key-here
+GROQ_MODEL=openai/gpt-oss-120b
 ```
 
 Seed the databases (generates SQLite `crm.db` and Vector DB `crm_knowledge.json`):
@@ -130,4 +139,5 @@ npm run dev
 2. Input a strategic question (e.g. *"Should we expand our sales team or hire more developers?"* or *"Who is our highest risk customer?"*).
 3. Click **Reason Decision** and watch the multi-agent trace stream live.
 4. Review the structured context, stats explanation, verdict banner, and action plan.
-5. Click **Data Sources** on the sidebar to audit the underlying database rows.
+5. Click **Canary Sentinel** on the sidebar to configure the background scheduler, view proactive alerts, inspect scan logs, and delete warnings.
+6. Click **Data Sources** on the sidebar to audit the underlying database rows.
