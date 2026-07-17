@@ -1870,8 +1870,9 @@ function App() {
     }
   };
 
-  // Fetch data sources on mount
-  useEffect(() => {
+  // Fetch data sources
+  const fetchDataSources = () => {
+    setSrcLoading(true);
     axios.get(`${API}/data-sources`)
       .then(r => { setDataSources(r.data.sources || []); setSrcLoading(false); })
       .catch(() => {
@@ -1892,6 +1893,10 @@ function App() {
         ]);
         setSrcLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchDataSources();
   }, []);
 
   // Auto-scroll
@@ -2150,10 +2155,7 @@ function App() {
         {/* Footer */}
         <div className="px-5 py-3.5 border-t border-[#1a1a1c] flex items-center justify-between flex-shrink-0">
           <span className="text-[10px] text-zinc-700 font-medium">v2.0 · 16 Modules</span>
-          <button onClick={() => { setSrcLoading(true);
-            axios.get(`${API}/data-sources`)
-              .then(r => { setDataSources(r.data.sources||[]); setSrcLoading(false); })
-              .catch(() => setSrcLoading(false)); }}
+          <button onClick={fetchDataSources}
             className="text-zinc-600 hover:text-zinc-400 transition" title="Refresh">
             <RefreshCw className="w-3.5 h-3.5" />
           </button>

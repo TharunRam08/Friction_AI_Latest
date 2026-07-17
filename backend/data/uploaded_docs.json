@@ -1,10 +1,10 @@
 [
   {
-    "id": "uploaded_enterprisedatasetlast30days_1784239706",
+    "id": "uploaded_enterprisedatasetlast30days_1784267338",
     "filename": "Enterprise Dataset (Last 30 Days).xlsx",
     "file_type": "XLSX",
     "size_bytes": 10117,
-    "summary": "XLSX File • 4 text chunks indexed",
+    "summary": "XLSX File • 6 text chunks indexed",
     "tags": [
       "Uploaded",
       "XLSX"
@@ -12,19 +12,93 @@
     "chunks": [
       {
         "index": 0,
-        "text": "Sheet: Sheet1\nRow 1: Col 1: Date, Col 2: Revenue (USD), Col 3: Inventory Levels (Units), Col 4: Support Tickets (Spikes), Col 5: Expenses (USD)\nRow 2: Col 1: 2026-06-17 00:00:00, Col 2: 12000, Col 3: 850, Col 4: 12, Col 5: 4000\nRow 3: Col 1: 2026-06-18 00:00:00, Col 2: 12500, Col 3: 840, Col 4: 14, Col 5: 4100\nRow 4: Col 1: 2026-06-19 00:00:00, Col 2: 11800, Col 3: 830, Col 4: 15, Col 5: 3950\nRow 5: Col 1: 2026-06-20 00:00:00, Col 2: 9000, Col 3: 825, Col 4: 9, Col 5: 4200\nRow 6: Col 1: 2026-06-21 00:00:00, Col 2: 8500, Col 3: 820, Col 4: 11, Col 5: 4300\nRow 7: Col 1: 2026-06-22 00:00:00, Col 2: 13000, Col 3: 810, Col 4: 16, Col 5: 4050\nRow 8: Col 1: 2026-06-23 00:00:00, Col 2: 12800, Col 3: 800, Col 4: 13, Col 5: 4120\nRow 9: Col 1: 2026-06-24 00:00:00, Col 2: 12200, Col 3: 790, Col 4: 14, Col 5: 4000\nRow 10: Col 1: 2026-06-25 00:00:00, Col 2: 12400, Col 3: 780, Col 4: 12, Col 5: 3980\nRow 11: Col 1: 2026-06-26 00:00:00, Col 2: 11900, Col 3: 775, Col 4: 18, Col 5: 4050\nRow 12: Col 1: 20"
+        "text": "Sheet: Sheet1\nRow 2: Date: 2026-06-17 00:00:00 | Revenue (USD): 12000 | Inventory Levels (Units): 850 | Support Tickets (Spikes): 12 | Expenses (USD): 4000\nRow 3: Date: 2026-06-18 00:00:00 | Revenue (USD): 12500 | Inventory Levels (Units): 840 | Support Tickets (Spikes): 14 | Expenses (USD): 4100\nRow 4: Date: 2026-06-19 00:00:00 | Revenue (USD): 11800 | Inventory Levels (Units): 830 | Support Tickets (Spikes): 15 | Expenses (USD): 3950\nRow 5: Date: 2026-06-20 00:00:00 | Revenue (USD): 9000 | Inventory Levels (Units): 825 | Support Tickets (Spikes): 9 | Expenses (USD): 4200\nRow 6: Date: 2026-06-21 00:00:00 | Revenue (USD): 8500 | Inventory Levels (Units): 820 | Support Tickets (Spikes): 11 | Expenses (USD): 4300\nRow 7: Date: 2026-06-22 00:00:00 | Revenue (USD): 13000 | Inventory Levels (Units): 810 | Support Tickets (Spikes): 16 | Expenses (USD): 4050\nRow 8: Date: 2026-06-23 00:00:00 | Revenue (USD): 12800 | Inventory Levels (Units): 800 | Support Tickets (Spikes): 13 | Expenses (USD): "
       },
       {
         "index": 1,
-        "text": " Col 5: 4000\nRow 10: Col 1: 2026-06-25 00:00:00, Col 2: 12400, Col 3: 780, Col 4: 12, Col 5: 3980\nRow 11: Col 1: 2026-06-26 00:00:00, Col 2: 11900, Col 3: 775, Col 4: 18, Col 5: 4050\nRow 12: Col 1: 2026-06-27 00:00:00, Col 2: 9500, Col 3: 770, Col 4: 10, Col 5: 4100\nRow 13: Col 1: 2026-06-28 00:00:00, Col 2: 8800, Col 3: 765, Col 4: 8, Col 5: 4150\nRow 14: Col 1: 2026-06-29 00:00:00, Col 2: 13400, Col 3: 750, Col 4: 15, Col 5: 4200\nRow 15: Col 1: 2026-06-30 00:00:00, Col 2: 13100, Col 3: 740, Col 4: 11, Col 5: 4110\nRow 16: Col 1: 2026-07-01 00:00:00, Col 2: 12900, Col 3: 730, Col 4: 13, Col 5: 4080\nRow 17: Col 1: 2026-07-02 00:00:00, Col 2: 12600, Col 3: 720, Col 4: 14, Col 5: 4150\nRow 18: Col 1: 2026-07-03 00:00:00, Col 2: 12800, Col 3: 715, Col 4: 16, Col 5: 4220\nRow 19: Col 1: 2026-07-04 00:00:00, Col 2: 9200, Col 3: 710, Col 4: 9, Col 5: 4300\nRow 20: Col 1: 2026-07-05 00:00:00, Col 2: 8900, Col 3: 705, Col 4: 7, Col 5: 4250\nRow 21: Col 1: 2026-07-06 00:00:00, Col 2: 13800, Col 3: 69"
+        "text": "ts): 810 | Support Tickets (Spikes): 16 | Expenses (USD): 4050\nRow 8: Date: 2026-06-23 00:00:00 | Revenue (USD): 12800 | Inventory Levels (Units): 800 | Support Tickets (Spikes): 13 | Expenses (USD): 4120\nRow 9: Date: 2026-06-24 00:00:00 | Revenue (USD): 12200 | Inventory Levels (Units): 790 | Support Tickets (Spikes): 14 | Expenses (USD): 4000\nRow 10: Date: 2026-06-25 00:00:00 | Revenue (USD): 12400 | Inventory Levels (Units): 780 | Support Tickets (Spikes): 12 | Expenses (USD): 3980\nRow 11: Date: 2026-06-26 00:00:00 | Revenue (USD): 11900 | Inventory Levels (Units): 775 | Support Tickets (Spikes): 18 | Expenses (USD): 4050\nRow 12: Date: 2026-06-27 00:00:00 | Revenue (USD): 9500 | Inventory Levels (Units): 770 | Support Tickets (Spikes): 10 | Expenses (USD): 4100\nRow 13: Date: 2026-06-28 00:00:00 | Revenue (USD): 8800 | Inventory Levels (Units): 765 | Support Tickets (Spikes): 8 | Expenses (USD): 4150\nRow 14: Date: 2026-06-29 00:00:00 | Revenue (USD): 13400 | Inventory Levels (Units):"
       },
       {
         "index": 2,
-        "text": " 00:00:00, Col 2: 9200, Col 3: 710, Col 4: 9, Col 5: 4300\nRow 20: Col 1: 2026-07-05 00:00:00, Col 2: 8900, Col 3: 705, Col 4: 7, Col 5: 4250\nRow 21: Col 1: 2026-07-06 00:00:00, Col 2: 13800, Col 3: 690, Col 4: 12, Col 5: 4180\nRow 22: Col 1: 2026-07-07 00:00:00, Col 2: 13500, Col 3: 680, Col 4: 15, Col 5: 4200\nRow 23: Col 1: 2026-07-08 00:00:00, Col 2: 13200, Col 3: 670, Col 4: 14, Col 5: 4250\nRow 24: Col 1: 2026-07-09 00:00:00, Col 2: 12900, Col 3: 660, Col 4: 13, Col 5: 4190\nRow 25: Col 1: 2026-07-10 00:00:00, Col 2: 12100, Col 3: 650, Col 4: 17, Col 5: 4300\nRow 26: Col 1: 2026-07-11 00:00:00, Col 2: 6200, Col 3: 410, Col 4: 45, Col 5: 8900\nRow 27: Col 1: 2026-07-12 00:00:00, Col 2: 5800, Col 3: 380, Col 4: 48, Col 5: 9200\nRow 28: Col 1: 2026-07-13 00:00:00, Col 2: 5500, Col 3: 350, Col 4: 52, Col 5: 9500\nRow 29: Col 1: 2026-07-14 00:00:00, Col 2: 5100, Col 3: 320, Col 4: 58, Col 5: 9800\nRow 30: Col 1: 2026-07-15 00:00:00, Col 2: 4800, Col 3: 290, Col 4: 62, Col 5: 10200\nRow 31: Col 1"
+        "text": "00:00:00 | Revenue (USD): 8800 | Inventory Levels (Units): 765 | Support Tickets (Spikes): 8 | Expenses (USD): 4150\nRow 14: Date: 2026-06-29 00:00:00 | Revenue (USD): 13400 | Inventory Levels (Units): 750 | Support Tickets (Spikes): 15 | Expenses (USD): 4200\nRow 15: Date: 2026-06-30 00:00:00 | Revenue (USD): 13100 | Inventory Levels (Units): 740 | Support Tickets (Spikes): 11 | Expenses (USD): 4110\nRow 16: Date: 2026-07-01 00:00:00 | Revenue (USD): 12900 | Inventory Levels (Units): 730 | Support Tickets (Spikes): 13 | Expenses (USD): 4080\nRow 17: Date: 2026-07-02 00:00:00 | Revenue (USD): 12600 | Inventory Levels (Units): 720 | Support Tickets (Spikes): 14 | Expenses (USD): 4150\nRow 18: Date: 2026-07-03 00:00:00 | Revenue (USD): 12800 | Inventory Levels (Units): 715 | Support Tickets (Spikes): 16 | Expenses (USD): 4220\nRow 19: Date: 2026-07-04 00:00:00 | Revenue (USD): 9200 | Inventory Levels (Units): 710 | Support Tickets (Spikes): 9 | Expenses (USD): 4300\nRow 20: Date: 2026-07-05 00:"
       },
       {
         "index": 3,
-        "text": ": 52, Col 5: 9500\nRow 29: Col 1: 2026-07-14 00:00:00, Col 2: 5100, Col 3: 320, Col 4: 58, Col 5: 9800\nRow 30: Col 1: 2026-07-15 00:00:00, Col 2: 4800, Col 3: 290, Col 4: 62, Col 5: 10200\nRow 31: Col 1: 2026-07-16 00:00:00, Col 2: 4500, Col 3: 260, Col 4: 65"
+        "text": "es): 16 | Expenses (USD): 4220\nRow 19: Date: 2026-07-04 00:00:00 | Revenue (USD): 9200 | Inventory Levels (Units): 710 | Support Tickets (Spikes): 9 | Expenses (USD): 4300\nRow 20: Date: 2026-07-05 00:00:00 | Revenue (USD): 8900 | Inventory Levels (Units): 705 | Support Tickets (Spikes): 7 | Expenses (USD): 4250\nRow 21: Date: 2026-07-06 00:00:00 | Revenue (USD): 13800 | Inventory Levels (Units): 690 | Support Tickets (Spikes): 12 | Expenses (USD): 4180\nRow 22: Date: 2026-07-07 00:00:00 | Revenue (USD): 13500 | Inventory Levels (Units): 680 | Support Tickets (Spikes): 15 | Expenses (USD): 4200\nRow 23: Date: 2026-07-08 00:00:00 | Revenue (USD): 13200 | Inventory Levels (Units): 670 | Support Tickets (Spikes): 14 | Expenses (USD): 4250\nRow 24: Date: 2026-07-09 00:00:00 | Revenue (USD): 12900 | Inventory Levels (Units): 660 | Support Tickets (Spikes): 13 | Expenses (USD): 4190\nRow 25: Date: 2026-07-10 00:00:00 | Revenue (USD): 12100 | Inventory Levels (Units): 650 | Support Tickets (Spikes)"
+      },
+      {
+        "index": 4,
+        "text": " Inventory Levels (Units): 660 | Support Tickets (Spikes): 13 | Expenses (USD): 4190\nRow 25: Date: 2026-07-10 00:00:00 | Revenue (USD): 12100 | Inventory Levels (Units): 650 | Support Tickets (Spikes): 17 | Expenses (USD): 4300\nRow 26: Date: 2026-07-11 00:00:00 | Revenue (USD): 6200 | Inventory Levels (Units): 410 | Support Tickets (Spikes): 45 | Expenses (USD): 8900\nRow 27: Date: 2026-07-12 00:00:00 | Revenue (USD): 5800 | Inventory Levels (Units): 380 | Support Tickets (Spikes): 48 | Expenses (USD): 9200\nRow 28: Date: 2026-07-13 00:00:00 | Revenue (USD): 5500 | Inventory Levels (Units): 350 | Support Tickets (Spikes): 52 | Expenses (USD): 9500\nRow 29: Date: 2026-07-14 00:00:00 | Revenue (USD): 5100 | Inventory Levels (Units): 320 | Support Tickets (Spikes): 58 | Expenses (USD): 9800\nRow 30: Date: 2026-07-15 00:00:00 | Revenue (USD): 4800 | Inventory Levels (Units): 290 | Support Tickets (Spikes): 62 | Expenses (USD): 10200\nRow 31: Date: 2026-07-16 00:00:00 | Revenue (USD): 4500 | Inv"
+      },
+      {
+        "index": 5,
+        "text": "30: Date: 2026-07-15 00:00:00 | Revenue (USD): 4800 | Inventory Levels (Units): 290 | Support Tickets (Spikes): 62 | Expenses (USD): 10200\nRow 31: Date: 2026-07-16 00:00:00 | Revenue (USD): 4500 | Inventory Levels (Units): 260 | Support Tickets (Spikes): 65 | Expenses (USD):"
+      }
+    ]
+  },
+  {
+    "id": "uploaded_friction_sample_strategic_report1_1784271400",
+    "filename": "Friction_Sample_Strategic_Report (1).pdf",
+    "file_type": "PDF",
+    "size_bytes": 5861,
+    "summary": "PDF File • 5 text chunks indexed",
+    "tags": [
+      "Uploaded",
+      "PDF"
+    ],
+    "chunks": [
+      {
+        "index": 0,
+        "text": "Friction AI — Enterprise Transaction Ledger\n2-Page Comprehensive Operational Dataset (Q2-Q3 2026)\nTransaction ID\nDate\nCustomer Name\nProduct Line\nAmount (USD)\nStatus\nTXN-10001\n2026-07-02\nBeta Solutions\nWarehouse Robotics\n$1,135.00\nPending\nTXN-10002\n2026-07-03\nGamma Industries\nLogistics Suite\n$1,270.00\nFailed\nTXN-10003\n2026-07-04\nDelta Logistics\nBI Analytics\n$1,405.00\nRefunded\nTXN-10004\n2026-07-05\nEpsilon Tech\nEnterprise SaaS\n$1,540.00\nCompleted\nTXN-10005\n2026-07-06\nZeta Ventures\nWarehouse Robotics\n$1,675.00\nPending\nTXN-10006\n2026-07-07\nEta Logistics\nLogistics Suite\n$1,810.00\nFailed\nTXN-10007\n2026-07-08\nTheta Retail\nBI Analytics\n$1,945.00\nRefunded\nTXN-10008\n2026-07-09\nIota Systems\nEnterprise SaaS\n$2,080.00\nCompleted\nTXN-10009\n2026-07-10\nKappa Energy\nWarehouse Robotics\n$2,215.00\nPending\nTXN-10010\n2026-07-11\nAcme Corp\nLogistics Suite\n$2,350.00\nFailed\nTXN-10011\n2026-07-12\nBeta Solutions\nBI Analytics\n$2,485.00\nRefunded\nTXN-10012\n2026-07-13\nGamma Industries\nEnterprise SaaS\n$2,620.00\nCompleted"
+      },
+      {
+        "index": 1,
+        "text": "0010\n2026-07-11\nAcme Corp\nLogistics Suite\n$2,350.00\nFailed\nTXN-10011\n2026-07-12\nBeta Solutions\nBI Analytics\n$2,485.00\nRefunded\nTXN-10012\n2026-07-13\nGamma Industries\nEnterprise SaaS\n$2,620.00\nCompleted\nTXN-10013\n2026-07-14\nDelta Logistics\nWarehouse Robotics\n$2,755.00\nPending\nTXN-10014\n2026-07-15\nEpsilon Tech\nLogistics Suite\n$2,890.00\nFailed\nTXN-10015\n2026-07-16\nZeta Ventures\nBI Analytics\n$3,025.00\nRefunded\nTXN-10016\n2026-07-17\nEta Logistics\nEnterprise SaaS\n$3,160.00\nCompleted\nTXN-10017\n2026-07-18\nTheta Retail\nWarehouse Robotics\n$3,295.00\nPending\nTXN-10018\n2026-07-19\nIota Systems\nLogistics Suite\n$3,430.00\nFailed\nTXN-10019\n2026-07-20\nKappa Energy\nBI Analytics\n$3,565.00\nRefunded\nTXN-10020\n2026-07-21\nAcme Corp\nEnterprise SaaS\n$3,700.00\nCompleted\nTXN-10021\n2026-07-22\nBeta Solutions\nWarehouse Robotics\n$3,835.00\nPending\nTXN-10022\n2026-07-23\nGamma Industries\nLogistics Suite\n$3,970.00\nFailed\nTXN-10023\n2026-07-24\nDelta Logistics\nBI Analytics\n$4,105.00\nRefunded\nTXN-10024\n2026-07-25\nEpsilon Tech\nEn"
+      },
+      {
+        "index": 2,
+        "text": "otics\n$3,835.00\nPending\nTXN-10022\n2026-07-23\nGamma Industries\nLogistics Suite\n$3,970.00\nFailed\nTXN-10023\n2026-07-24\nDelta Logistics\nBI Analytics\n$4,105.00\nRefunded\nTXN-10024\n2026-07-25\nEpsilon Tech\nEnterprise SaaS\n$4,240.00\nCompleted\nTXN-10025\n2026-07-26\nZeta Ventures\nWarehouse Robotics\n$4,375.00\nPending\nTXN-10026\n2026-07-27\nEta Logistics\nLogistics Suite\n$4,510.00\nFailed\nTXN-10027\n2026-07-28\nTheta Retail\nBI Analytics\n$4,645.00\nRefunded\nTXN-10028\n2026-07-01\nIota Systems\nEnterprise SaaS\n$4,780.00\nCompleted\nTXN-10029\n2026-07-02\nKappa Energy\nWarehouse Robotics\n$4,915.00\nPending\nTXN-10030\n2026-07-03\nAcme Corp\nLogistics Suite\n$5,050.00\nFailed\nTransaction ID\nDate\nCustomer Name\nProduct Line\nAmount (USD)\nStatus\nTXN-10031\n2026-07-04\nBeta Solutions\nBI Analytics\n$5,185.00\nRefunded\nTXN-10032\n2026-07-05\nGamma Industries\nEnterprise SaaS\n$5,320.00\nCompleted\nTXN-10033\n2026-07-06\nDelta Logistics\nWarehouse Robotics\n$5,455.00\nPending\nTXN-10034\n2026-07-07\nEpsilon Tech\nLogistics Suite\n$5,590.00\nFailed\nTXN-1"
+      },
+      {
+        "index": 3,
+        "text": "\nGamma Industries\nEnterprise SaaS\n$5,320.00\nCompleted\nTXN-10033\n2026-07-06\nDelta Logistics\nWarehouse Robotics\n$5,455.00\nPending\nTXN-10034\n2026-07-07\nEpsilon Tech\nLogistics Suite\n$5,590.00\nFailed\nTXN-10035\n2026-07-08\nZeta Ventures\nBI Analytics\n$5,725.00\nRefunded\nTXN-10036\n2026-07-09\nEta Logistics\nEnterprise SaaS\n$5,860.00\nCompleted\nTXN-10037\n2026-07-10\nTheta Retail\nWarehouse Robotics\n$5,995.00\nPending\nTXN-10038\n2026-07-11\nIota Systems\nLogistics Suite\n$6,130.00\nFailed\nTXN-10039\n2026-07-12\nKappa Energy\nBI Analytics\n$6,265.00\nRefunded\nTXN-10040\n2026-07-13\nAcme Corp\nEnterprise SaaS\n$6,400.00\nCompleted\nTXN-10041\n2026-07-14\nBeta Solutions\nWarehouse Robotics\n$6,535.00\nPending\nTXN-10042\n2026-07-15\nGamma Industries\nLogistics Suite\n$6,670.00\nFailed\nTXN-10043\n2026-07-16\nDelta Logistics\nBI Analytics\n$6,805.00\nRefunded\nTXN-10044\n2026-07-17\nEpsilon Tech\nEnterprise SaaS\n$6,940.00\nCompleted\nTXN-10045\n2026-07-18\nZeta Ventures\nWarehouse Robotics\n$7,075.00\nPending\nTXN-10046\n2026-07-19\nEta Logistics\nLogist"
+      },
+      {
+        "index": 4,
+        "text": ",805.00\nRefunded\nTXN-10044\n2026-07-17\nEpsilon Tech\nEnterprise SaaS\n$6,940.00\nCompleted\nTXN-10045\n2026-07-18\nZeta Ventures\nWarehouse Robotics\n$7,075.00\nPending\nTXN-10046\n2026-07-19\nEta Logistics\nLogistics Suite\n$7,210.00\nFailed\nTXN-10047\n2026-07-20\nTheta Retail\nBI Analytics\n$7,345.00\nRefunded\nTXN-10048\n2026-07-21\nIota Systems\nEnterprise SaaS\n$7,480.00\nCompleted\nTXN-10049\n2026-07-22\nKappa Energy\nWarehouse Robotics\n$7,615.00\nPending\nTXN-10050\n2026-07-23\nAcme Corp\nLogistics Suite\n$7,750.00\nFailed\nTXN-10051\n2026-07-24\nBeta Solutions\nBI Analytics\n$7,885.00\nRefunded\nTXN-10052\n2026-07-25\nGamma Industries\nEnterprise SaaS\n$8,020.00\nCompleted\nTXN-10053\n2026-07-26\nDelta Logistics\nWarehouse Robotics\n$8,155.00\nPending\nTXN-10054\n2026-07-27\nEpsilon Tech\nLogistics Suite\n$8,290.00\nFailed\nTXN-10055\n2026-07-28\nZeta Ventures\nBI Analytics\n$8,425.00\nRefunded"
+      }
+    ]
+  },
+  {
+    "id": "uploaded_friction_sample_strategic_report1_1784279531",
+    "filename": "Friction_Sample_Strategic_Report (1).pdf",
+    "file_type": "PDF",
+    "size_bytes": 5861,
+    "summary": "PDF File • 5 text chunks indexed",
+    "tags": [
+      "Uploaded",
+      "PDF"
+    ],
+    "chunks": [
+      {
+        "index": 0,
+        "text": "Friction AI — Enterprise Transaction Ledger\n2-Page Comprehensive Operational Dataset (Q2-Q3 2026)\nTransaction ID\nDate\nCustomer Name\nProduct Line\nAmount (USD)\nStatus\nTXN-10001\n2026-07-02\nBeta Solutions\nWarehouse Robotics\n$1,135.00\nPending\nTXN-10002\n2026-07-03\nGamma Industries\nLogistics Suite\n$1,270.00\nFailed\nTXN-10003\n2026-07-04\nDelta Logistics\nBI Analytics\n$1,405.00\nRefunded\nTXN-10004\n2026-07-05\nEpsilon Tech\nEnterprise SaaS\n$1,540.00\nCompleted\nTXN-10005\n2026-07-06\nZeta Ventures\nWarehouse Robotics\n$1,675.00\nPending\nTXN-10006\n2026-07-07\nEta Logistics\nLogistics Suite\n$1,810.00\nFailed\nTXN-10007\n2026-07-08\nTheta Retail\nBI Analytics\n$1,945.00\nRefunded\nTXN-10008\n2026-07-09\nIota Systems\nEnterprise SaaS\n$2,080.00\nCompleted\nTXN-10009\n2026-07-10\nKappa Energy\nWarehouse Robotics\n$2,215.00\nPending\nTXN-10010\n2026-07-11\nAcme Corp\nLogistics Suite\n$2,350.00\nFailed\nTXN-10011\n2026-07-12\nBeta Solutions\nBI Analytics\n$2,485.00\nRefunded\nTXN-10012\n2026-07-13\nGamma Industries\nEnterprise SaaS\n$2,620.00\nCompleted"
+      },
+      {
+        "index": 1,
+        "text": "0010\n2026-07-11\nAcme Corp\nLogistics Suite\n$2,350.00\nFailed\nTXN-10011\n2026-07-12\nBeta Solutions\nBI Analytics\n$2,485.00\nRefunded\nTXN-10012\n2026-07-13\nGamma Industries\nEnterprise SaaS\n$2,620.00\nCompleted\nTXN-10013\n2026-07-14\nDelta Logistics\nWarehouse Robotics\n$2,755.00\nPending\nTXN-10014\n2026-07-15\nEpsilon Tech\nLogistics Suite\n$2,890.00\nFailed\nTXN-10015\n2026-07-16\nZeta Ventures\nBI Analytics\n$3,025.00\nRefunded\nTXN-10016\n2026-07-17\nEta Logistics\nEnterprise SaaS\n$3,160.00\nCompleted\nTXN-10017\n2026-07-18\nTheta Retail\nWarehouse Robotics\n$3,295.00\nPending\nTXN-10018\n2026-07-19\nIota Systems\nLogistics Suite\n$3,430.00\nFailed\nTXN-10019\n2026-07-20\nKappa Energy\nBI Analytics\n$3,565.00\nRefunded\nTXN-10020\n2026-07-21\nAcme Corp\nEnterprise SaaS\n$3,700.00\nCompleted\nTXN-10021\n2026-07-22\nBeta Solutions\nWarehouse Robotics\n$3,835.00\nPending\nTXN-10022\n2026-07-23\nGamma Industries\nLogistics Suite\n$3,970.00\nFailed\nTXN-10023\n2026-07-24\nDelta Logistics\nBI Analytics\n$4,105.00\nRefunded\nTXN-10024\n2026-07-25\nEpsilon Tech\nEn"
+      },
+      {
+        "index": 2,
+        "text": "otics\n$3,835.00\nPending\nTXN-10022\n2026-07-23\nGamma Industries\nLogistics Suite\n$3,970.00\nFailed\nTXN-10023\n2026-07-24\nDelta Logistics\nBI Analytics\n$4,105.00\nRefunded\nTXN-10024\n2026-07-25\nEpsilon Tech\nEnterprise SaaS\n$4,240.00\nCompleted\nTXN-10025\n2026-07-26\nZeta Ventures\nWarehouse Robotics\n$4,375.00\nPending\nTXN-10026\n2026-07-27\nEta Logistics\nLogistics Suite\n$4,510.00\nFailed\nTXN-10027\n2026-07-28\nTheta Retail\nBI Analytics\n$4,645.00\nRefunded\nTXN-10028\n2026-07-01\nIota Systems\nEnterprise SaaS\n$4,780.00\nCompleted\nTXN-10029\n2026-07-02\nKappa Energy\nWarehouse Robotics\n$4,915.00\nPending\nTXN-10030\n2026-07-03\nAcme Corp\nLogistics Suite\n$5,050.00\nFailed\nTransaction ID\nDate\nCustomer Name\nProduct Line\nAmount (USD)\nStatus\nTXN-10031\n2026-07-04\nBeta Solutions\nBI Analytics\n$5,185.00\nRefunded\nTXN-10032\n2026-07-05\nGamma Industries\nEnterprise SaaS\n$5,320.00\nCompleted\nTXN-10033\n2026-07-06\nDelta Logistics\nWarehouse Robotics\n$5,455.00\nPending\nTXN-10034\n2026-07-07\nEpsilon Tech\nLogistics Suite\n$5,590.00\nFailed\nTXN-1"
+      },
+      {
+        "index": 3,
+        "text": "\nGamma Industries\nEnterprise SaaS\n$5,320.00\nCompleted\nTXN-10033\n2026-07-06\nDelta Logistics\nWarehouse Robotics\n$5,455.00\nPending\nTXN-10034\n2026-07-07\nEpsilon Tech\nLogistics Suite\n$5,590.00\nFailed\nTXN-10035\n2026-07-08\nZeta Ventures\nBI Analytics\n$5,725.00\nRefunded\nTXN-10036\n2026-07-09\nEta Logistics\nEnterprise SaaS\n$5,860.00\nCompleted\nTXN-10037\n2026-07-10\nTheta Retail\nWarehouse Robotics\n$5,995.00\nPending\nTXN-10038\n2026-07-11\nIota Systems\nLogistics Suite\n$6,130.00\nFailed\nTXN-10039\n2026-07-12\nKappa Energy\nBI Analytics\n$6,265.00\nRefunded\nTXN-10040\n2026-07-13\nAcme Corp\nEnterprise SaaS\n$6,400.00\nCompleted\nTXN-10041\n2026-07-14\nBeta Solutions\nWarehouse Robotics\n$6,535.00\nPending\nTXN-10042\n2026-07-15\nGamma Industries\nLogistics Suite\n$6,670.00\nFailed\nTXN-10043\n2026-07-16\nDelta Logistics\nBI Analytics\n$6,805.00\nRefunded\nTXN-10044\n2026-07-17\nEpsilon Tech\nEnterprise SaaS\n$6,940.00\nCompleted\nTXN-10045\n2026-07-18\nZeta Ventures\nWarehouse Robotics\n$7,075.00\nPending\nTXN-10046\n2026-07-19\nEta Logistics\nLogist"
+      },
+      {
+        "index": 4,
+        "text": ",805.00\nRefunded\nTXN-10044\n2026-07-17\nEpsilon Tech\nEnterprise SaaS\n$6,940.00\nCompleted\nTXN-10045\n2026-07-18\nZeta Ventures\nWarehouse Robotics\n$7,075.00\nPending\nTXN-10046\n2026-07-19\nEta Logistics\nLogistics Suite\n$7,210.00\nFailed\nTXN-10047\n2026-07-20\nTheta Retail\nBI Analytics\n$7,345.00\nRefunded\nTXN-10048\n2026-07-21\nIota Systems\nEnterprise SaaS\n$7,480.00\nCompleted\nTXN-10049\n2026-07-22\nKappa Energy\nWarehouse Robotics\n$7,615.00\nPending\nTXN-10050\n2026-07-23\nAcme Corp\nLogistics Suite\n$7,750.00\nFailed\nTXN-10051\n2026-07-24\nBeta Solutions\nBI Analytics\n$7,885.00\nRefunded\nTXN-10052\n2026-07-25\nGamma Industries\nEnterprise SaaS\n$8,020.00\nCompleted\nTXN-10053\n2026-07-26\nDelta Logistics\nWarehouse Robotics\n$8,155.00\nPending\nTXN-10054\n2026-07-27\nEpsilon Tech\nLogistics Suite\n$8,290.00\nFailed\nTXN-10055\n2026-07-28\nZeta Ventures\nBI Analytics\n$8,425.00\nRefunded"
       }
     ]
   }

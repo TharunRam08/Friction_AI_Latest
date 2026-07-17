@@ -152,132 +152,132 @@
   {
     "type": "deal",
     "id": 1,
-    "text": "Deal 'Annual Expansion License' with Apex Retail Corp is in stage 'Closed-Won'. Value $85,000, win probability 100%, expected close 2024-01-15, owned by Priya Nair."
+    "text": "Deal 'Annual Expansion License' with Apex Retail Corp is in stage 'Closed-Won'. Value $85,000, win probability 100%, expected close 2023-01-15, owned by Priya Nair."
   },
   {
     "type": "deal",
     "id": 2,
-    "text": "Deal 'Supply Chain Platform Upgrade' with BlueSky Logistics is in stage 'Negotiation'. Value $62,000, win probability 75%, expected close 2024-08-30, owned by Rahul Singh."
+    "text": "Deal 'Supply Chain Platform Upgrade' with BlueSky Logistics is in stage 'Negotiation'. Value $62,000, win probability 75%, expected close 2023-08-30, owned by Rahul Singh."
   },
   {
     "type": "deal",
     "id": 3,
-    "text": "Deal 'DevOps Consulting Package' with CoreTech Solutions is in stage 'Proposal'. Value $28,000, win probability 50%, expected close 2024-09-15, owned by Ananya Kumar."
+    "text": "Deal 'DevOps Consulting Package' with CoreTech Solutions is in stage 'Proposal'. Value $28,000, win probability 50%, expected close 2023-09-15, owned by Ananya Kumar."
   },
   {
     "type": "deal",
     "id": 4,
-    "text": "Deal 'Risk Analytics Suite' with DeltaWave Finance is in stage 'Closed-Won'. Value $110,000, win probability 100%, expected close 2024-02-28, owned by Kiran Mehta."
+    "text": "Deal 'Risk Analytics Suite' with DeltaWave Finance is in stage 'Closed-Won'. Value $110,000, win probability 100%, expected close 2023-02-28, owned by Kiran Mehta."
   },
   {
     "type": "deal",
     "id": 5,
-    "text": "Deal 'IoT Sensor Network' with EcoGrow Industries is in stage 'Qualified'. Value $18,000, win probability 30%, expected close 2024-10-01, owned by Priya Nair."
+    "text": "Deal 'IoT Sensor Network' with EcoGrow Industries is in stage 'Qualified'. Value $18,000, win probability 30%, expected close 2023-10-01, owned by Priya Nair."
   },
   {
     "type": "deal",
     "id": 6,
-    "text": "Deal 'Patient Data Platform' with FusionMed Hospital is in stage 'Closed-Won'. Value $120,000, win probability 100%, expected close 2024-03-10, owned by Rahul Singh."
+    "text": "Deal 'Patient Data Platform' with FusionMed Hospital is in stage 'Closed-Won'. Value $120,000, win probability 100%, expected close 2023-03-10, owned by Rahul Singh."
   },
   {
     "type": "deal",
     "id": 7,
-    "text": "Deal 'Carbon Credit Tracking' with GreenPath Energy is in stage 'Proposal'. Value $22,000, win probability 45%, expected close 2024-09-20, owned by Ananya Kumar."
+    "text": "Deal 'Carbon Credit Tracking' with GreenPath Energy is in stage 'Proposal'. Value $22,000, win probability 45%, expected close 2023-09-20, owned by Ananya Kumar."
   },
   {
     "type": "deal",
     "id": 8,
-    "text": "Deal 'Fraud Detection Engine Tier2' with HorizonBank is in stage 'Negotiation'. Value $95,000, win probability 80%, expected close 2024-08-15, owned by Kiran Mehta."
+    "text": "Deal 'Fraud Detection Engine Tier2' with HorizonBank is in stage 'Negotiation'. Value $95,000, win probability 80%, expected close 2023-08-15, owned by Kiran Mehta."
   },
   {
     "type": "deal",
     "id": 9,
-    "text": "Deal 'Startup CRM Bundle' with InnovateTech Startup is in stage 'Prospect'. Value $8,000, win probability 20%, expected close 2024-11-01, owned by Priya Nair."
+    "text": "Deal 'Startup CRM Bundle' with InnovateTech Startup is in stage 'Prospect'. Value $8,000, win probability 20%, expected close 2023-11-01, owned by Priya Nair."
   },
   {
     "type": "deal",
     "id": 10,
-    "text": "Deal 'Fleet Management Dashboard' with JetStream Airways is in stage 'Proposal'. Value $74,000, win probability 55%, expected close 2024-09-30, owned by Rahul Singh."
+    "text": "Deal 'Fleet Management Dashboard' with JetStream Airways is in stage 'Proposal'. Value $74,000, win probability 55%, expected close 2023-09-30, owned by Rahul Singh."
   },
   {
     "type": "deal",
     "id": 11,
-    "text": "Deal 'API Integration Starter' with KloudBase SaaS is in stage 'Prospect'. Value $6,000, win probability 15%, expected close 2024-11-15, owned by Ananya Kumar."
+    "text": "Deal 'API Integration Starter' with KloudBase SaaS is in stage 'Prospect'. Value $6,000, win probability 15%, expected close 2023-11-15, owned by Ananya Kumar."
   },
   {
     "type": "deal",
     "id": 12,
-    "text": "Deal 'Crop Analytics Lite' with LunarFarm Organics is in stage 'Qualified'. Value $12,000, win probability 25%, expected close 2024-10-10, owned by Kiran Mehta."
+    "text": "Deal 'Crop Analytics Lite' with LunarFarm Organics is in stage 'Qualified'. Value $12,000, win probability 25%, expected close 2023-10-10, owned by Kiran Mehta."
   },
   {
     "type": "deal",
     "id": 13,
-    "text": "Deal 'Smart City Dashboard' with MetroCity Council is in stage 'Closed-Won'. Value $55,000, win probability 100%, expected close 2024-04-05, owned by Priya Nair."
+    "text": "Deal 'Smart City Dashboard' with MetroCity Council is in stage 'Closed-Won'. Value $55,000, win probability 100%, expected close 2023-04-05, owned by Priya Nair."
   },
   {
     "type": "deal",
     "id": 14,
-    "text": "Deal 'Clinical Trial Management' with NovaMed Pharma is in stage 'Closed-Won'. Value $135,000, win probability 100%, expected close 2024-01-30, owned by Rahul Singh."
+    "text": "Deal 'Clinical Trial Management' with NovaMed Pharma is in stage 'Closed-Won'. Value $135,000, win probability 100%, expected close 2023-01-30, owned by Rahul Singh."
   },
   {
     "type": "deal",
     "id": 15,
-    "text": "Deal 'Inventory Optimizer' with OmniChain Supply is in stage 'Proposal'. Value $19,000, win probability 40%, expected close 2024-09-25, owned by Ananya Kumar."
+    "text": "Deal 'Inventory Optimizer' with OmniChain Supply is in stage 'Proposal'. Value $19,000, win probability 40%, expected close 2023-09-25, owned by Ananya Kumar."
   },
   {
     "type": "deal",
     "id": 16,
-    "text": "Deal 'Member Analytics App' with PeakForm Fitness is in stage 'Prospect'. Value $5,000, win probability 10%, expected close 2024-12-01, owned by Kiran Mehta."
+    "text": "Deal 'Member Analytics App' with PeakForm Fitness is in stage 'Prospect'. Value $5,000, win probability 10%, expected close 2023-12-01, owned by Kiran Mehta."
   },
   {
     "type": "deal",
     "id": 17,
-    "text": "Deal 'Project Cost Tracker' with QuantumBuild is in stage 'Negotiation'. Value $31,000, win probability 70%, expected close 2024-08-20, owned by Priya Nair."
+    "text": "Deal 'Project Cost Tracker' with QuantumBuild is in stage 'Negotiation'. Value $31,000, win probability 70%, expected close 2023-08-20, owned by Priya Nair."
   },
   {
     "type": "deal",
     "id": 18,
-    "text": "Deal 'Route Optimization Module' with RapidShip Couriers is in stage 'Qualified'. Value $17,000, win probability 35%, expected close 2024-10-05, owned by Rahul Singh."
+    "text": "Deal 'Route Optimization Module' with RapidShip Couriers is in stage 'Qualified'. Value $17,000, win probability 35%, expected close 2023-10-05, owned by Rahul Singh."
   },
   {
     "type": "deal",
     "id": 19,
-    "text": "Deal 'Grid Analytics Platform' with SolarNest Energy is in stage 'Closed-Won'. Value $42,000, win probability 100%, expected close 2024-05-12, owned by Ananya Kumar."
+    "text": "Deal 'Grid Analytics Platform' with SolarNest Energy is in stage 'Closed-Won'. Value $42,000, win probability 100%, expected close 2023-05-12, owned by Ananya Kumar."
   },
   {
     "type": "deal",
     "id": 20,
-    "text": "Deal 'Portfolio Risk Engine' with TerraFlex Properties is in stage 'Negotiation'. Value $88,000, win probability 78%, expected close 2024-08-28, owned by Kiran Mehta."
+    "text": "Deal 'Portfolio Risk Engine' with TerraFlex Properties is in stage 'Negotiation'. Value $88,000, win probability 78%, expected close 2023-08-28, owned by Kiran Mehta."
   },
   {
     "type": "deal",
     "id": 21,
-    "text": "Deal 'POS Integration Suite' with UrbanDine Group is in stage 'Qualified'. Value $11,000, win probability 20%, expected close 2024-10-15, owned by Priya Nair."
+    "text": "Deal 'POS Integration Suite' with UrbanDine Group is in stage 'Qualified'. Value $11,000, win probability 20%, expected close 2023-10-15, owned by Priya Nair."
   },
   {
     "type": "deal",
     "id": 22,
-    "text": "Deal 'Zero-Trust Security Audit' with VeroVault Security is in stage 'Closed-Won'. Value $72,000, win probability 100%, expected close 2024-03-22, owned by Rahul Singh."
+    "text": "Deal 'Zero-Trust Security Audit' with VeroVault Security is in stage 'Closed-Won'. Value $72,000, win probability 100%, expected close 2023-03-22, owned by Rahul Singh."
   },
   {
     "type": "deal",
     "id": 23,
-    "text": "Deal 'Fleet GPS Tracker' with WaveRider Marine is in stage 'Proposal'. Value $16,000, win probability 45%, expected close 2024-09-18, owned by Ananya Kumar."
+    "text": "Deal 'Fleet GPS Tracker' with WaveRider Marine is in stage 'Proposal'. Value $16,000, win probability 45%, expected close 2023-09-18, owned by Ananya Kumar."
   },
   {
     "type": "deal",
     "id": 24,
-    "text": "Deal 'MLOps Pipeline' with XenithAI Labs is in stage 'Prospect'. Value $9,000, win probability 15%, expected close 2024-11-20, owned by Kiran Mehta."
+    "text": "Deal 'MLOps Pipeline' with XenithAI Labs is in stage 'Prospect'. Value $9,000, win probability 15%, expected close 2023-11-20, owned by Kiran Mehta."
   },
   {
     "type": "deal",
     "id": 25,
-    "text": "Deal 'Retail Analytics Bundle' with YellowBrick Retail is in stage 'Proposal'. Value $21,000, win probability 50%, expected close 2024-09-10, owned by Priya Nair."
+    "text": "Deal 'Retail Analytics Bundle' with YellowBrick Retail is in stage 'Proposal'. Value $21,000, win probability 50%, expected close 2023-09-10, owned by Priya Nair."
   },
   {
     "type": "deal",
     "id": 26,
-    "text": "Deal 'Clinical Workflow Tool' with ZenithCare Clinics is in stage 'Negotiation'. Value $28,000, win probability 65%, expected close 2024-08-25, owned by Rahul Singh."
+    "text": "Deal 'Clinical Workflow Tool' with ZenithCare Clinics is in stage 'Closed-Won'. Value $28,000, win probability 100%, expected close 2024-12-05, owned by Rahul Singh."
   },
   {
     "type": "deal",
@@ -307,7 +307,7 @@
   {
     "type": "deal",
     "id": 32,
-    "text": "Deal 'Compliance Module Upgrade' with DeltaWave Finance is in stage 'Negotiation'. Value $45,000, win probability 72%, expected close 2024-09-05, owned by Kiran Mehta."
+    "text": "Deal 'Compliance Module Upgrade' with DeltaWave Finance is in stage 'Closed-Won'. Value $45,000, win probability 100%, expected close 2024-12-12, owned by Kiran Mehta."
   },
   {
     "type": "deal",
@@ -317,7 +317,7 @@
   {
     "type": "deal",
     "id": 34,
-    "text": "Deal 'Lab Data Integration' with NovaMed Pharma is in stage 'Negotiation'. Value $55,000, win probability 68%, expected close 2024-08-22, owned by Rahul Singh."
+    "text": "Deal 'Lab Data Integration' with NovaMed Pharma is in stage 'Closed-Won'. Value $55,000, win probability 100%, expected close 2024-12-18, owned by Rahul Singh."
   },
   {
     "type": "deal",
@@ -337,7 +337,7 @@
   {
     "type": "deal",
     "id": 38,
-    "text": "Deal 'Predictive Maintenance' with DawnRise Manufacturing is in stage 'Proposal'. Value $67,000, win probability 58%, expected close 2024-10-18, owned by Rahul Singh."
+    "text": "Deal 'Predictive Maintenance' with DawnRise Manufacturing is in stage 'Closed-Won'. Value $67,000, win probability 100%, expected close 2024-12-25, owned by Rahul Singh."
   },
   {
     "type": "deal",
@@ -347,97 +347,97 @@
   {
     "type": "deal",
     "id": 40,
-    "text": "Deal 'Fuel Cost Optimizer' with JetStream Airways is in stage 'Prospect'. Value $51,000, win probability 20%, expected close 2024-12-15, owned by Kiran Mehta."
+    "text": "Deal 'Fuel Cost Optimizer' with JetStream Airways is in stage 'Closed-Won'. Value $95,000, win probability 100%, expected close 2024-12-29, owned by Kiran Mehta."
   },
   {
     "type": "financial",
     "id": 1,
-    "text": "In 2023-01: Revenue $820,000, profit $215,000 (26.2% margin), COGS $410,000, operating costs $195,000, budget $800,000, headcount 48."
+    "text": "In 2023-01: Revenue $750,000, profit $-50,000 (-6.7% margin), COGS $420,000, operating costs $380,000, budget $800,000, headcount 48."
   },
   {
     "type": "financial",
     "id": 2,
-    "text": "In 2023-02: Revenue $795,000, profit $205,000 (25.8% margin), COGS $398,000, operating costs $192,000, budget $800,000, headcount 48."
+    "text": "In 2023-02: Revenue $710,000, profit $-55,000 (-7.7% margin), COGS $390,000, operating costs $375,000, budget $800,000, headcount 48."
   },
   {
     "type": "financial",
     "id": 3,
-    "text": "In 2023-03: Revenue $870,000, profit $237,000 (27.2% margin), COGS $435,000, operating costs $198,000, budget $850,000, headcount 49."
+    "text": "In 2023-03: Revenue $890,000, profit $70,000 (7.9% margin), COGS $440,000, operating costs $380,000, budget $850,000, headcount 49."
   },
   {
     "type": "financial",
     "id": 4,
-    "text": "In 2023-04: Revenue $910,000, profit $250,000 (27.5% margin), COGS $455,000, operating costs $205,000, budget $900,000, headcount 51."
+    "text": "In 2023-04: Revenue $1,120,000, profit $220,000 (19.6% margin), COGS $510,000, operating costs $390,000, budget $900,000, headcount 51."
   },
   {
     "type": "financial",
     "id": 5,
-    "text": "In 2023-05: Revenue $945,000, profit $262,500 (27.8% margin), COGS $472,500, operating costs $210,000, budget $920,000, headcount 51."
+    "text": "In 2023-05: Revenue $1,250,000, profit $300,000 (24.0% margin), COGS $550,000, operating costs $400,000, budget $920,000, headcount 51."
   },
   {
     "type": "financial",
     "id": 6,
-    "text": "In 2023-06: Revenue $980,000, profit $275,000 (28.1% margin), COGS $490,000, operating costs $215,000, budget $960,000, headcount 52."
+    "text": "In 2023-06: Revenue $1,320,000, profit $330,000 (25.0% margin), COGS $580,000, operating costs $410,000, budget $960,000, headcount 52."
   },
   {
     "type": "financial",
     "id": 7,
-    "text": "In 2023-07: Revenue $1,020,000, profit $285,000 (27.9% margin), COGS $510,000, operating costs $225,000, budget $1,000,000, headcount 53."
+    "text": "In 2023-07: Revenue $850,000, profit $-30,000 (-3.5% margin), COGS $460,000, operating costs $420,000, budget $1,000,000, headcount 53."
   },
   {
     "type": "financial",
     "id": 8,
-    "text": "In 2023-08: Revenue $1,050,000, profit $295,000 (28.1% margin), COGS $525,000, operating costs $230,000, budget $1,020,000, headcount 54."
+    "text": "In 2023-08: Revenue $820,000, profit $-50,000 (-6.1% margin), COGS $450,000, operating costs $420,000, budget $1,020,000, headcount 54."
   },
   {
     "type": "financial",
     "id": 9,
-    "text": "In 2023-09: Revenue $1,080,000, profit $305,000 (28.2% margin), COGS $540,000, operating costs $235,000, budget $1,050,000, headcount 55."
+    "text": "In 2023-09: Revenue $980,000, profit $65,000 (6.6% margin), COGS $490,000, operating costs $425,000, budget $1,050,000, headcount 55."
   },
   {
     "type": "financial",
     "id": 10,
-    "text": "In 2023-10: Revenue $1,110,000, profit $315,000 (28.4% margin), COGS $555,000, operating costs $240,000, budget $1,080,000, headcount 56."
+    "text": "In 2023-10: Revenue $1,280,000, profit $260,000 (20.3% margin), COGS $590,000, operating costs $430,000, budget $1,080,000, headcount 56."
   },
   {
     "type": "financial",
     "id": 11,
-    "text": "In 2023-11: Revenue $1,150,000, profit $327,000 (28.4% margin), COGS $575,000, operating costs $248,000, budget $1,120,000, headcount 57."
+    "text": "In 2023-11: Revenue $1,350,000, profit $310,000 (23.0% margin), COGS $610,000, operating costs $430,000, budget $1,120,000, headcount 57."
   },
   {
     "type": "financial",
     "id": 12,
-    "text": "In 2023-12: Revenue $1,240,000, profit $355,000 (28.6% margin), COGS $620,000, operating costs $265,000, budget $1,200,000, headcount 58."
+    "text": "In 2023-12: Revenue $1,650,000, profit $470,000 (28.5% margin), COGS $720,000, operating costs $460,000, budget $1,200,000, headcount 58."
   },
   {
     "type": "financial",
     "id": 13,
-    "text": "In 2024-01: Revenue $1,180,000, profit $332,000 (28.1% margin), COGS $590,000, operating costs $258,000, budget $1,150,000, headcount 58."
+    "text": "In 2024-01: Revenue $950,000, profit $-50,000 (-5.3% margin), COGS $520,000, operating costs $480,000, budget $1,150,000, headcount 58."
   },
   {
     "type": "financial",
     "id": 14,
-    "text": "In 2024-02: Revenue $1,220,000, profit $348,000 (28.5% margin), COGS $610,000, operating costs $262,000, budget $1,180,000, headcount 59."
+    "text": "In 2024-02: Revenue $920,000, profit $-70,000 (-7.6% margin), COGS $510,000, operating costs $480,000, budget $1,180,000, headcount 59."
   },
   {
     "type": "financial",
     "id": 15,
-    "text": "In 2024-03: Revenue $1,295,000, profit $377,500 (29.2% margin), COGS $647,500, operating costs $270,000, budget $1,260,000, headcount 60."
+    "text": "In 2024-03: Revenue $1,180,000, profit $110,000 (9.3% margin), COGS $580,000, operating costs $490,000, budget $1,260,000, headcount 60."
   },
   {
     "type": "financial",
     "id": 16,
-    "text": "In 2024-04: Revenue $1,310,000, profit $380,000 (29.0% margin), COGS $655,000, operating costs $275,000, budget $1,280,000, headcount 61."
+    "text": "In 2024-04: Revenue $1,420,000, profit $230,000 (16.2% margin), COGS $680,000, operating costs $510,000, budget $1,280,000, headcount 61."
   },
   {
     "type": "financial",
     "id": 17,
-    "text": "In 2024-05: Revenue $1,340,000, profit $388,000 (29.0% margin), COGS $670,000, operating costs $282,000, budget $1,300,000, headcount 62."
+    "text": "In 2024-05: Revenue $1,510,000, profit $270,000 (17.9% margin), COGS $720,000, operating costs $520,000, budget $1,300,000, headcount 62."
   },
   {
     "type": "financial",
     "id": 18,
-    "text": "In 2024-06: Revenue $1,375,000, profit $397,500 (28.9% margin), COGS $687,500, operating costs $290,000, budget $1,350,000, headcount 63."
+    "text": "In 2024-06: Revenue $1,680,000, profit $370,000 (22.0% margin), COGS $780,000, operating costs $530,000, budget $1,350,000, headcount 63."
   },
   {
     "type": "team",
@@ -892,47 +892,47 @@
   {
     "type": "support_summary",
     "id": 1,
-    "text": "Support ticket summary: 40 resolved tickets, avg resolution time 4.8 days, avg CSAT score 4.2/5. 10 tickets currently open/in-progress. 8 critical priority tickets raised."
+    "text": "Support ticket summary: 50 resolved tickets, avg resolution time 4.3 days, avg CSAT score 4.2/5. 0 tickets currently open/in-progress. 8 critical priority tickets raised."
   },
   {
     "type": "support_ticket",
     "id": 50,
-    "text": "Support ticket from DeltaWave Finance: Security issue, priority Critical, status In Progress. Opened 2024-06-30. Awaiting resolution."
+    "text": "Support ticket from DeltaWave Finance: Security issue, priority Critical, status Closed. Opened 2024-12-31. Awaiting resolution."
   },
   {
     "type": "support_ticket",
     "id": 48,
-    "text": "Support ticket from JetStream Airways: Performance issue, priority High, status In Progress. Opened 2024-06-26. Awaiting resolution."
+    "text": "Support ticket from JetStream Airways: Performance issue, priority High, status Closed. Opened 2024-12-25, resolved in 1 days, CSAT 4.5/5."
   },
   {
     "type": "support_ticket",
     "id": 47,
-    "text": "Support ticket from LunarFarm Organics: Billing issue, priority High, status Open. Opened 2024-06-25. Awaiting resolution."
+    "text": "Support ticket from LunarFarm Organics: Billing issue, priority High, status Closed. Opened 2024-12-20, resolved in 3 days, CSAT 3.0/5."
   },
   {
     "type": "support_ticket",
     "id": 45,
-    "text": "Support ticket from TerraFlex Properties: Integration issue, priority High, status Open. Opened 2024-06-22. Awaiting resolution."
+    "text": "Support ticket from TerraFlex Properties: Integration issue, priority High, status Closed. Opened 2024-12-08, resolved in 2 days, CSAT 4.5/5."
   },
   {
     "type": "support_ticket",
     "id": 42,
-    "text": "Support ticket from BlueSky Logistics: Bug issue, priority High, status In Progress. Opened 2024-06-15. Awaiting resolution."
+    "text": "Support ticket from BlueSky Logistics: Bug issue, priority High, status Closed. Opened 2024-11-15, resolved in 3 days, CSAT 4.0/5."
   },
   {
     "type": "support_ticket",
     "id": 41,
-    "text": "Support ticket from NovaMed Pharma: Integration issue, priority High, status In Progress. Opened 2024-06-12. Awaiting resolution."
+    "text": "Support ticket from NovaMed Pharma: Integration issue, priority High, status Closed. Opened 2024-10-10, resolved in 2 days, CSAT 4.5/5."
   },
   {
     "type": "support_ticket",
     "id": 40,
-    "text": "Support ticket from HorizonBank: Security issue, priority Critical, status Closed. Opened 2024-06-08, resolved in 1 days, CSAT 5.0/5."
+    "text": "Support ticket from HorizonBank: Security issue, priority Critical, status Closed. Opened 2024-09-12, resolved in 1 days, CSAT 5.0/5."
   },
   {
     "type": "support_ticket",
     "id": 39,
-    "text": "Support ticket from ClearPath Insurance: Bug issue, priority High, status Closed. Opened 2024-06-05, resolved in 3 days, CSAT 4.5/5."
+    "text": "Support ticket from ClearPath Insurance: Bug issue, priority High, status Closed. Opened 2024-08-05, resolved in 3 days, CSAT 4.5/5."
   },
   {
     "type": "support_ticket",
@@ -1085,34 +1085,74 @@
     "text": "In 2024-06, total expenses were $312,000: Salaries $132,000, Cloud $48,000, Marketing $25,200, Office $10,000, Software $18,500, Ops $27,000, R&D $33,000, Travel $6,800."
   },
   {
+    "type": "expense",
+    "id": 19,
+    "text": "In 2024-07, total expenses were $320,500: Salaries $135,000, Cloud $49,000, Marketing $18,000, Office $10,000, Software $18,500, Ops $28,000, R&D $33,000, Travel $7,000."
+  },
+  {
+    "type": "expense",
+    "id": 20,
+    "text": "In 2024-08, total expenses were $311,500: Salaries $135,000, Cloud $47,000, Marketing $12,500, Office $10,000, Software $18,500, Ops $27,500, R&D $33,000, Travel $6,500."
+  },
+  {
+    "type": "expense",
+    "id": 21,
+    "text": "In 2024-09, total expenses were $332,500: Salaries $138,000, Cloud $51,000, Marketing $22,500, Office $10,500, Software $19,000, Ops $28,500, R&D $34,000, Travel $7,200."
+  },
+  {
+    "type": "expense",
+    "id": 22,
+    "text": "In 2024-10, total expenses were $347,500: Salaries $142,000, Cloud $53,500, Marketing $28,000, Office $10,500, Software $19,500, Ops $29,000, R&D $35,000, Travel $8,000."
+  },
+  {
+    "type": "expense",
+    "id": 23,
+    "text": "In 2024-11, total expenses were $358,000: Salaries $145,000, Cloud $55,000, Marketing $32,000, Office $10,500, Software $19,500, Ops $29,500, R&D $35,500, Travel $8,500."
+  },
+  {
+    "type": "expense",
+    "id": 24,
+    "text": "In 2024-12, total expenses were $384,000: Salaries $152,000, Cloud $62,000, Marketing $45,000, Office $11,000, Software $21,000, Ops $31,000, R&D $37,000, Travel $10,500."
+  },
+  {
     "type": "kpi",
     "id": 1,
-    "text": "KPIs for Q1 2023: MRR $845,000, ARR $10,140,000, churn rate 3.2%, NPS 42, CAC $2,800, avg deal size $4,500, pipeline velocity 68.0 days, win rate 24.0%."
+    "text": "KPIs for Q1 2023: MRR $750,000, ARR $9,000,000, churn rate 3.2%, NPS 42, CAC $3,200, avg deal size $4,500, pipeline velocity 68.0 days, win rate 24.0%."
   },
   {
     "type": "kpi",
     "id": 2,
-    "text": "KPIs for Q2 2023: MRR $945,000, ARR $11,340,000, churn rate 2.8%, NPS 45, CAC $2,600, avg deal size $4,800, pipeline velocity 64.0 days, win rate 25.5%."
+    "text": "KPIs for Q2 2023: MRR $980,000, ARR $11,760,000, churn rate 2.2%, NPS 48, CAC $2,600, avg deal size $4,800, pipeline velocity 64.0 days, win rate 28.5%."
   },
   {
     "type": "kpi",
     "id": 3,
-    "text": "KPIs for Q3 2023: MRR $1,050,000, ARR $12,600,000, churn rate 2.5%, NPS 48, CAC $2,400, avg deal size $5,200, pipeline velocity 60.0 days, win rate 27.0%."
+    "text": "KPIs for Q3 2023: MRR $830,000, ARR $9,960,000, churn rate 4.5%, NPS 39, CAC $3,500, avg deal size $4,200, pipeline velocity 72.0 days, win rate 21.0%."
   },
   {
     "type": "kpi",
     "id": 4,
-    "text": "KPIs for Q4 2023: MRR $1,210,000, ARR $14,520,000, churn rate 2.1%, NPS 51, CAC $2,200, avg deal size $5,600, pipeline velocity 57.0 days, win rate 29.5%."
+    "text": "KPIs for Q4 2023: MRR $1,180,000, ARR $14,160,000, churn rate 1.8%, NPS 52, CAC $2,200, avg deal size $5,600, pipeline velocity 57.0 days, win rate 32.5%."
   },
   {
     "type": "kpi",
     "id": 5,
-    "text": "KPIs for Q1 2024: MRR $1,231,000, ARR $14,772,000, churn rate 1.9%, NPS 54, CAC $2,100, avg deal size $5,900, pipeline velocity 54.0 days, win rate 30.8%."
+    "text": "KPIs for Q1 2024: MRR $950,000, ARR $11,400,000, churn rate 3.8%, NPS 44, CAC $3,000, avg deal size $4,900, pipeline velocity 65.0 days, win rate 23.8%."
   },
   {
     "type": "kpi",
     "id": 6,
-    "text": "KPIs for Q2 2024: MRR $1,341,000, ARR $16,092,000, churn rate 2.0%, NPS 52, CAC $2,150, avg deal size $6,100, pipeline velocity 55.0 days, win rate 30.2%."
+    "text": "KPIs for Q2 2024: MRR $1,280,000, ARR $15,360,000, churn rate 2.1%, NPS 50, CAC $2,150, avg deal size $6,100, pipeline velocity 55.0 days, win rate 30.2%."
+  },
+  {
+    "type": "kpi",
+    "id": 7,
+    "text": "KPIs for Q3 2024: MRR $1,080,000, ARR $12,960,000, churn rate 4.2%, NPS 41, CAC $3,300, avg deal size $5,100, pipeline velocity 68.0 days, win rate 22.4%."
+  },
+  {
+    "type": "kpi",
+    "id": 8,
+    "text": "KPIs for Q4 2024: MRR $1,520,000, ARR $18,240,000, churn rate 1.6%, NPS 55, CAC $2,000, avg deal size $6,500, pipeline velocity 52.0 days, win rate 34.8%."
   },
   {
     "type": "contract",
@@ -1207,12 +1247,12 @@
   {
     "type": "insight",
     "id": 1004,
-    "text": "Business KPI trend: ARR grew from $10,140,000 in Q1 2023 to $16,092,000 in Q2 2024. Churn improved from 3.2% to 2.0%. NPS improved from 42 to 52."
+    "text": "Business KPI trend: ARR grew from $9,000,000 in Q1 2023 to $18,240,000 in Q4 2024. Churn improved from 3.2% to 1.6%. NPS improved from 42 to 55."
   },
   {
     "type": "insight",
     "id": 1005,
-    "text": "Recent monthly expense trend: 2024-06: $312,000 total (salaries $132,000, cloud $48,000), 2024-05: $293,500 total (salaries $128,000, cloud $46,500), 2024-04: $296,000 total (salaries $125,000, cloud $45,000)."
+    "text": "Recent monthly expense trend: 2024-12: $384,000 total (salaries $152,000, cloud $62,000), 2024-11: $358,000 total (salaries $145,000, cloud $55,000), 2024-10: $347,500 total (salaries $142,000, cloud $53,500)."
   },
   {
     "type": "insight",
