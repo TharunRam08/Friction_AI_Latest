@@ -74,6 +74,7 @@ def init_canary_db():
     CREATE TABLE IF NOT EXISTS canary_alerts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         headline TEXT,
+        solution TEXT,
         evidence TEXT,
         severity TEXT,
         mode TEXT,
@@ -81,6 +82,12 @@ def init_canary_db():
         status TEXT DEFAULT 'Active',
         feedback TEXT DEFAULT 'None'
     )""")
+    
+    # Run migration to add solution column if table already exists
+    try:
+        cursor.execute("ALTER TABLE canary_alerts ADD COLUMN solution TEXT")
+    except sqlite3.OperationalError:
+        pass
     
     # 5. Canary Checkpoints for Incremental Scanning
     cursor.execute("""
@@ -148,12 +155,12 @@ def get_canary_alerts(limit=50):
     conn.close()
     return [dict(r) for r in rows]
 
-def add_canary_alert(headline: str, evidence: str, severity: str, mode: str, timestamp: str):
+def add_canary_alert(headline: str, solution: str, evidence: str, severity: str, mode: str, timestamp: str):
     conn = get_conn()
     conn.execute("""
-    INSERT INTO canary_alerts (headline, evidence, severity, mode, timestamp, status, feedback)
-    VALUES (?, ?, ?, ?, ?, 'Active', 'None')
-    """, (headline, evidence, severity, mode, timestamp))
+    INSERT INTO canary_alerts (headline, solution, evidence, severity, mode, timestamp, status, feedback)
+    VALUES (?, ?, ?, ?, ?, ?, 'Active', 'None')
+    """, (headline, solution, evidence, severity, mode, timestamp))
     conn.commit()
     conn.close()
 

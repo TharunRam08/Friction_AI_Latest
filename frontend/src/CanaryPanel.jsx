@@ -292,9 +292,17 @@ export default function CanaryPanel({ API }) {
 
                     {/* Headline in simple, readable English */}
                     <div className="space-y-1">
-                      <span className="text-[9px] font-bold text-zinc-550 uppercase tracking-widest block">Watchdog Finding</span>
+                      <span className="text-[9px] font-bold text-red-400/80 uppercase tracking-widest block">Watchdog Finding (Problem)</span>
                       <h3 className="text-sm font-semibold text-white leading-snug">{alert.headline}</h3>
                     </div>
+
+                    {/* Recommended Solution */}
+                    {alert.solution && (
+                      <div className="space-y-1 bg-emerald-950/10 border border-emerald-900/20 p-3 rounded-lg">
+                        <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest block">Recommended Action (Solution)</span>
+                        <p className="text-xs text-zinc-300 leading-relaxed">{alert.solution}</p>
+                      </div>
+                    )}
 
                     <div className="bg-[#111213] border border-[#1e1e22] p-3 rounded-lg space-y-2">
                       <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider block">Observed Metrics</span>

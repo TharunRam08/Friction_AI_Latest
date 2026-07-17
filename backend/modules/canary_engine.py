@@ -229,6 +229,7 @@ class CanaryEngine:
         if fired:
             # Generate risk statement using Groq or fallback plain text
             headline = f"Canary detected potential risk pattern of {severity} severity."
+            solution = "Please verify your safety stock thresholds and allocate support bandwidth."
             evidence = json.dumps(current_metrics)
             
             if groq_client:
@@ -240,9 +241,10 @@ class CanaryEngine:
                         f"Baselines: {baselines}\n"
                         f"Aggregate Z-score: {aggregate_score:.2f}\n"
                         f"Detected Mode: {mode}\n"
-                        f"Write one single, extremely clear, simple, and friendly English sentence that a business owner would instantly understand. "
-                        f"Explain the risk in plain English based on the metrics (e.g. inventory is too low while customer support tickets are piling up). "
-                        f"Do not use complex jargon, and do not include introductions, greetings, or prefixes like 'Here is your headline'."
+                        f"Construct both a clear explanation of the problem AND a perfect, practical solution. "
+                        f"Return ONLY a valid JSON object with the keys 'problem' and 'solution'.\n"
+                        f"Both values must be written in one single, extremely clear, simple, and friendly English sentence that a business owner would instantly understand, without jargon.\n"
+                        f"Example: {{\"problem\": \"Your hardware inventory is running critically low while customer support requests are spiking.\", \"solution\": \"Immediately restock your Edge Gateway devices and assign extra support reps to resolve pending tickets.\"}}"
                     )
                     chat_completion = groq_client.chat.completions.create(
                         messages=[
@@ -252,16 +254,21 @@ class CanaryEngine:
                             }
                         ],
                         model="llama-3.3-70b-versatile",
+                        response_format={"type": "json_object"},
                         temperature=0.3,
                     )
-                    headline = chat_completion.choices[0].message.content.strip().strip('"')
+                    clean_res = json.loads(chat_completion.choices[0].message.content.strip())
+                    headline = clean_res.get("problem", f"Potential profit decline linked to safety stock depletion ({qty_on_hand:.0f} units) and rising support load ({recent_daily_avg_tickets:.1f} tickets/day).")
+                    solution = clean_res.get("solution", "Verify safety stock thresholds and allocate support bandwidth.")
                 except Exception as e:
                     headline = f"Alert: Low stock alert ({qty_on_hand:.0f} units left) paired with high customer ticket volumes ({recent_daily_avg_tickets:.1f} per day)."
+                    solution = "Purchase Edge Gateway devices immediately and delegate extra developers to clear support backlog."
             else:
                 headline = f"Alert: Low stock alert ({qty_on_hand:.0f} units left) paired with high customer ticket volumes ({recent_daily_avg_tickets:.1f} per day)."
-
+                solution = "Purchase Edge Gateway devices immediately and delegate extra developers to clear support backlog."
+ 
             # Add to alerts table
-            add_canary_alert(headline, evidence, severity, mode, datetime.now().isoformat())
+            add_canary_alert(headline, solution, evidence, severity, mode, datetime.now().isoformat())
             summary += " ALERT FIRED!"
 
         return summary, json.dumps(details_dict, indent=2)
