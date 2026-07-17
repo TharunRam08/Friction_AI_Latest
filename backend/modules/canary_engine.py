@@ -241,10 +241,10 @@ class CanaryEngine:
                         f"Baselines: {baselines}\n"
                         f"Aggregate Z-score: {aggregate_score:.2f}\n"
                         f"Detected Mode: {mode}\n"
-                        f"Construct both a clear explanation of the problem AND a perfect, practical solution. "
+                        f"Construct a clear explanation of the problem AND a detailed, simple, understandable solution.\n"
                         f"Return ONLY a valid JSON object with the keys 'problem' and 'solution'.\n"
-                        f"Both values must be written in one single, extremely clear, simple, and friendly English sentence that a business owner would instantly understand, without jargon.\n"
-                        f"Example: {{\"problem\": \"Your hardware inventory is running critically low while customer support requests are spiking.\", \"solution\": \"Immediately restock your Edge Gateway devices and assign extra support reps to resolve pending tickets.\"}}"
+                        f"The 'problem' must be one single, clear, simple, and friendly sentence explaining the risk in plain English.\n"
+                        f"The 'solution' must be a detailed, step-by-step, simple set of practical actions (2-3 sentences) explaining exactly what the business owner should do to fix the problem (e.g. order stock, allocate support staff, adjust thresholds)."
                     )
                     chat_completion = groq_client.chat.completions.create(
                         messages=[
