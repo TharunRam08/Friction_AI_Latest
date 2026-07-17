@@ -26,13 +26,24 @@ HIGH — Strategic decisions with major business impact, multiple trade-offs, or
 Return ONLY valid JSON:
 {"level": "LOW"|"MEDIUM"|"HIGH", "reason": "brief 1 sentence reason", "key_risks": ["risk1", "risk2"]}"""
 
-    resp = client.chat.completions.create(
-        messages=[{"role": "system", "content": system},
-                  {"role": "user", "content": f'Question: "{question}"\nIntent: {json.dumps(intent)}'}],
-        model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
-        response_format={"type": "json_object"},
-        temperature=0.1,
-    )
+    models = [os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"), "openai/gpt-oss-120b", "llama-3.3-70b-versatile"]
+    resp = None
+    last_err = None
+    for m in models:
+        try:
+            resp = client.chat.completions.create(
+                messages=[{"role": "system", "content": system},
+                          {"role": "user", "content": f'Question: "{question}"\nIntent: {json.dumps(intent)}'}],
+                model=m,
+                response_format={"type": "json_object"},
+                temperature=0.1,
+            )
+            break
+        except Exception as ex:
+            last_err = ex
+            continue
+    if resp is None:
+        raise last_err if last_err is not None else Exception("All models failed")
     result = json.loads(resp.choices[0].message.content)
     level = result.get("level", "MEDIUM").upper()
     if level not in ("LOW", "MEDIUM", "HIGH"):

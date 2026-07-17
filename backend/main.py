@@ -546,7 +546,7 @@ def extract_table_from_pdf_text_via_llm(text: str):
             messages=[
                 {"role": "user", "content": prompt}
             ],
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
             temperature=0.0,
             response_format={"type": "json_object"}
         )
@@ -1425,16 +1425,28 @@ def get_crm_ai_insights(data: dict) -> dict:
             "Return ONLY the raw JSON object, starting with { and ending with }. No markdown formatting or conversational filler."
         )
 
-        chat_completion = client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
-            model="llama-3.3-70b-versatile",
-            temperature=0.2,
-            response_format={"type": "json_object"}
-        )
+        primary_model = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+        models = [primary_model, "openai/gpt-oss-120b", "llama-3.3-70b-versatile"]
+        chat_completion = None
+        last_err = None
+        for m in models:
+            try:
+                chat_completion = client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model=m,
+                    temperature=0.2,
+                    response_format={"type": "json_object"}
+                )
+                break
+            except Exception as ex:
+                last_err = ex
+                continue
+        if chat_completion is None:
+            raise last_err if last_err is not None else Exception("All models failed")
         raw_response = chat_completion.choices[0].message.content
         return json.loads(raw_response)
     except Exception as e:
-        print(f"⚠️ Error generating AI crm insights: {e}")
+        print(f"Warning: Error generating AI crm insights: {e}")
         # Fallback if Groq API fails or is not configured
         return {
             "executive_summary": "Your business shows steady financial performance over the past month. Closed-won deals are driving strong cash flow, while operating overhead remains aligned with budgets.",
@@ -1514,7 +1526,8 @@ async def shutdown_event():
 # ── Canary APIs ────────────────────────────────────────────────────────────────
 from data.canary_db import (
     get_canary_config, update_canary_config, get_canary_alerts,
-    update_alert_feedback, get_canary_logs, get_failure_library
+    update_alert_feedback, get_canary_logs, get_failure_library,
+    delete_canary_alert
 )
 from modules.canary_engine import CanaryEngine
 
@@ -1557,6 +1570,14 @@ async def get_canary_alerts_api(limit: int = 50):
 async def update_canary_feedback_api(alert_id: int, feedback: str):
     try:
         update_alert_feedback(alert_id, feedback)
+        return {"status": "success"}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.delete("/api/canary/alerts/{alert_id}")
+async def delete_canary_alert_api(alert_id: int):
+    try:
+        delete_canary_alert(alert_id)
         return {"status": "success"}
     except Exception as e:
         return {"error": str(e)}

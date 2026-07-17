@@ -210,7 +210,7 @@ Self Review: {self_review_text}"""
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_content}
             ],
-            model="llama-3.3-70b-versatile",
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
             response_format={"type": "json_object"},
             temperature=0.2,
         )

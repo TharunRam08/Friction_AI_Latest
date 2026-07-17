@@ -5,6 +5,7 @@ Module 13 — Business Constraints Validator (checks budget, headcount, complian
 Module 14 — Reflective Self Review (AI critiques itself)
 """
 import json
+import os
 
 def validate_evidence_and_constraints(
     question: str,
@@ -71,7 +72,7 @@ Return ONLY valid JSON:
                 f'Department Opinions:\n' + '\n'.join(views_summary)
             )}
         ],
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
         response_format={"type": "json_object"},
         temperature=0.1,
     )
@@ -112,7 +113,7 @@ Return ONLY a plain text string (no JSON)."""
             {"role": "system", "content": system},
             {"role": "user", "content": f'Question: "{question}"\nReasoning summary: {json.dumps(summary)}'}
         ],
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
         temperature=0.4,
     )
     return resp.choices[0].message.content.strip()

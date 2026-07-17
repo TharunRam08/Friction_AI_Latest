@@ -187,6 +187,12 @@ def resolve_canary_alert(alert_id: int):
     conn.commit()
     conn.close()
 
+def delete_canary_alert(alert_id: int):
+    conn = get_conn()
+    conn.execute("DELETE FROM canary_alerts WHERE id = ?", (alert_id,))
+    conn.commit()
+    conn.close()
+
 def get_checkpoint(table_name: str) -> str:
     conn = get_conn()
     row = conn.execute("SELECT last_scanned_at FROM canary_checkpoints WHERE table_name = ?", (table_name,)).fetchone()

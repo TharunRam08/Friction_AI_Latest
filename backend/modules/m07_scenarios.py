@@ -4,6 +4,7 @@ Module 9 — Scenario Simulation + Module 10 — Devil's Advocate + Module 11 �
 Generates 3 alternative futures, attacks each, then picks lowest-regret option.
 """
 import json
+import os
 
 def run_scenarios_and_regret(question: str, intent: dict, context_snapshot: str,
                               debate_summary: str, client) -> dict:
@@ -60,7 +61,7 @@ Return ONLY valid JSON:
                 f'Department Perspectives Summary:\n{debate_summary}'
             )}
         ],
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
         response_format={"type": "json_object"},
         temperature=0.3,
     )

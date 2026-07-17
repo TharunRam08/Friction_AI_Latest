@@ -246,17 +246,29 @@ class CanaryEngine:
                         f"The 'problem' must be one single, clear, simple, and friendly sentence explaining the risk in plain English.\n"
                         f"The 'solution' must be a detailed, step-by-step, simple set of practical actions (2-3 sentences) explaining exactly what the business owner should do to fix the problem (e.g. order stock, allocate support staff, adjust thresholds)."
                     )
-                    chat_completion = groq_client.chat.completions.create(
-                        messages=[
-                            {
-                                "role": "user",
-                                "content": prompt,
-                            }
-                        ],
-                        model="llama-3.3-70b-versatile",
-                        response_format={"type": "json_object"},
-                        temperature=0.3,
-                    )
+                    primary_model = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+                    models = [primary_model, "openai/gpt-oss-120b", "llama-3.3-70b-versatile"]
+                    chat_completion = None
+                    last_err = None
+                    for m in models:
+                        try:
+                            chat_completion = groq_client.chat.completions.create(
+                                messages=[
+                                    {
+                                        "role": "user",
+                                        "content": prompt,
+                                    }
+                                ],
+                                model=m,
+                                response_format={"type": "json_object"},
+                                temperature=0.3,
+                            )
+                            break
+                        except Exception as ex:
+                            last_err = ex
+                            continue
+                    if chat_completion is None:
+                        raise last_err if last_err is not None else Exception("All models failed")
                     clean_res = json.loads(chat_completion.choices[0].message.content.strip())
                     headline = clean_res.get("problem", f"Potential profit decline linked to safety stock depletion ({qty_on_hand:.0f} units) and rising support load ({recent_daily_avg_tickets:.1f} tickets/day).")
                     solution = clean_res.get("solution", "Verify safety stock thresholds and allocate support bandwidth.")

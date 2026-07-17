@@ -3,7 +3,7 @@ import axios from 'axios';
 import { 
   Play, Square, RefreshCw, AlertTriangle, ShieldCheck, 
   Activity, Clock, FileText, CheckCircle2, XCircle, ChevronDown, ChevronUp,
-  Percent, AlertCircle
+  Percent, AlertCircle, Trash2
 } from 'lucide-react';
 
 export default function CanaryPanel({ API }) {
@@ -112,6 +112,17 @@ export default function CanaryPanel({ API }) {
       fetchData();
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleDeleteAlert = async (alertId) => {
+    if (window.confirm("Are you sure you want to delete this alert?")) {
+      try {
+        await axios.delete(`${API}/api/canary/alerts/${alertId}`);
+        fetchData();
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -353,6 +364,14 @@ export default function CanaryPanel({ API }) {
                           Feedback: {alert.feedback}
                         </span>
                       )}
+
+                      <button 
+                        onClick={() => handleDeleteAlert(alert.id)}
+                        className="p-1.5 rounded-lg border border-red-900/25 bg-red-950/5 hover:bg-red-950/20 text-red-400 transition ml-1"
+                        title="Delete Alert"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
                 </div>

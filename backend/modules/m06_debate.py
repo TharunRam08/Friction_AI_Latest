@@ -4,6 +4,7 @@ Debate Module — runs 4 department personas in parallel via Groq.
 Each persona now receives its own slice of real CRM data to reason from.
 """
 import json
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from data.crm_db import get_financial_summary, get_deal_pipeline, get_team_stats, get_customer_health
 
@@ -78,7 +79,7 @@ Return ONLY a JSON object with keys: "stance", "reasons" (list of 2 short string
 
     chat_completion = client.chat.completions.create(
         messages=[{"role": "user", "content": prompt}],
-        model="llama-3.3-70b-versatile",
+        model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
         response_format={"type": "json_object"},
         temperature=0.2,
     )
