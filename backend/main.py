@@ -897,8 +897,47 @@ async def data_source_rows(table: str, limit: int = 100):
     return {"table": table, "columns": columns, "rows": [dict(r) for r in rows], "total": len(rows)}
 
 
+def parse_pdf_generator(file_path: str):
+    import gc
+    from pypdf import PdfReader
+    reader = PdfReader(file_path)
+    for page_idx, page in enumerate(reader.pages):
+        try:
+            text = page.extract_text()
+            if text:
+                yield text
+            del text
+        except Exception as e:
+            print(f"⚠️ Error parsing PDF page {page_idx}: {e}")
+        if page_idx % 5 == 0:
+            gc.collect()
+
+def parse_excel_generator(file_path: str):
+    import openpyxl
+    import gc
+    wb = openpyxl.load_workbook(file_path, data_only=True)
+    for sheet_name in wb.sheetnames:
+        sheet = wb[sheet_name]
+        text_parts = [f"Sheet: {sheet_name}"]
+        
+        for r_idx, row in enumerate(sheet.iter_rows(values_only=True), 1):
+            row_str = ", ".join(f"Col {col_idx}: {cell}" for col_idx, cell in enumerate(row, 1) if cell is not None)
+            if row_str.strip():
+                text_parts.append(row_str)
+            
+            if len(text_parts) >= 100:
+                yield "\n".join(text_parts)
+                text_parts = []
+                gc.collect()
+        
+        if text_parts:
+            yield "\n".join(text_parts)
+            del text_parts
+            gc.collect()
+
 @app.post("/upload-document")
 async def upload_document(file: UploadFile = File(...)):
+    import gc
     upload_dir = os.path.join(os.path.dirname(__file__), "data", "uploads")
     os.makedirs(upload_dir, exist_ok=True)
     file_path = os.path.join(upload_dir, file.filename)
@@ -911,55 +950,115 @@ async def upload_document(file: UploadFile = File(...)):
         
     size_bytes = os.path.getsize(file_path)
     ext = os.path.splitext(file.filename)[1].lower()
-    text = ""
     file_type = ext[1:].upper() if ext else "UNKNOWN"
     
-    try:
-        if ext == ".pdf":
-            text = parse_pdf(file_path)
-        elif ext in (".xlsx", ".xls"):
-            text = parse_excel(file_path)
-        elif ext == ".csv":
-            text = parse_csv(file_path)
-        elif ext in (".txt", ".md", ".json"):
-            text = parse_txt(file_path)
-        else:
-            if os.path.exists(file_path):
-                os.remove(file_path)
-            return {"success": False, "error": f"Unsupported file type: {ext}"}
-    except Exception as e:
-        if os.path.exists(file_path):
-            os.remove(file_path)
-        return {"success": False, "error": f"Failed to parse file: {str(e)}"}
-        
-    cleaned = clean_text(text)
-    if not cleaned:
-        if os.path.exists(file_path):
-            os.remove(file_path)
-        return {"success": False, "error": "Document contains no readable text."}
-        
-    from data.vectordb import add_document_to_vector_db
     sanitized_name = "".join(c for c in os.path.splitext(file.filename)[0] if c.isalnum() or c in ("_", "-")).lower()
     doc_id = f"uploaded_{sanitized_name}_{int(time.time())}"
     
+    if ext == ".pdf":
+        chunks_generator = parse_pdf_generator(file_path)
+    elif ext in (".xlsx", ".xls"):
+        chunks_generator = parse_excel_generator(file_path)
+    elif ext == ".csv":
+        def csv_generator(path):
+            import csv
+            with open(path, "r", encoding="utf-8", errors="ignore") as f:
+                reader = csv.reader(f)
+                buf = []
+                for r_idx, row in enumerate(reader, 1):
+                    if row:
+                        buf.append(f"Row {r_idx}: " + ", ".join(str(c) for c in row if c is not None))
+                    if len(buf) >= 100:
+                        yield "\n".join(buf)
+                        buf = []
+                        gc.collect()
+                if buf:
+                    yield "\n".join(buf)
+        chunks_generator = csv_generator(file_path)
+    elif ext in (".txt", ".md", ".json"):
+        def txt_generator(path):
+            with open(path, "r", encoding="utf-8", errors="ignore") as f:
+                while True:
+                    chunk = f.read(50000)
+                    if not chunk:
+                        break
+                    yield chunk
+                    del chunk
+                    gc.collect()
+        chunks_generator = txt_generator(file_path)
+    else:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        return {"success": False, "error": f"Unsupported file type: {ext}"}
+
+    from data.vectordb import add_chunks_to_vector_db_incremental
+    
+    chunks_for_metadata = []
+    all_chunks = []
+    chunk_buffer = ""
+    chunk_size = 1000
+    overlap = 200
+    
     try:
-        chunks = add_document_to_vector_db(cleaned, file.filename, doc_id)
+        for text_block in chunks_generator:
+            cleaned_block = clean_text(text_block)
+            if not cleaned_block:
+                continue
+            
+            chunk_buffer += cleaned_block + "\n"
+            del cleaned_block
+            
+            while len(chunk_buffer) >= chunk_size:
+                chunk = chunk_buffer[:chunk_size]
+                all_chunks.append(chunk)
+                chunks_for_metadata.append(chunk)
+                
+                chunk_buffer = chunk_buffer[chunk_size - overlap:]
+                
+                if len(all_chunks) >= 10:
+                    add_chunks_to_vector_db_incremental(all_chunks, file.filename, doc_id, len(chunks_for_metadata) - len(all_chunks))
+                    all_chunks = []
+                    gc.collect()
+                    
+        if chunk_buffer.strip():
+            # Add remaining trailing data as final chunk
+            chunk = chunk_buffer.strip()
+            all_chunks.append(chunk)
+            chunks_for_metadata.append(chunk)
+            del chunk_buffer
+            
+        if all_chunks:
+            add_chunks_to_vector_db_incremental(all_chunks, file.filename, doc_id, len(chunks_for_metadata) - len(all_chunks))
+            del all_chunks
+            
+        gc.collect()
+        
     except Exception as e:
         if os.path.exists(file_path):
             os.remove(file_path)
-        return {"success": False, "error": f"Failed to generate embeddings: {str(e)}"}
-    
+        return {"success": False, "error": f"Failed to parse and index document: {str(e)}"}
+        
+    if not chunks_for_metadata:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        return {"success": False, "error": "Document contains no readable text."}
+
     try:
-        save_uploaded_doc_metadata(doc_id, file.filename, file_type, size_bytes, chunks)
+        save_uploaded_doc_metadata(doc_id, file.filename, file_type, size_bytes, chunks_for_metadata)
     except Exception as e:
         return {"success": False, "error": f"Failed to save metadata: {str(e)}"}
+        
+    total_chunks = len(chunks_for_metadata)
+    total_chars = sum(len(c) for c in chunks_for_metadata)
+    del chunks_for_metadata
+    gc.collect()
     
     return {
         "success": True,
         "filename": file.filename,
         "doc_id": doc_id,
-        "chunks_count": len(chunks),
-        "total_chars": len(cleaned)
+        "chunks_count": total_chunks,
+        "total_chars": total_chars
     }
 
 
@@ -1629,4 +1728,6 @@ async def trigger_canary_manual():
 
 # ── Run ───────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=7860)
+    import os
+    port = int(os.getenv("PORT", 7860))
+    uvicorn.run(app, host="0.0.0.0", port=port)

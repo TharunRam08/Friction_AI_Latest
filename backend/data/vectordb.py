@@ -114,6 +114,20 @@ def add_document_to_vector_db(text: str, filename: str, doc_id: str) -> list:
     return chunks
 
 
+def add_chunks_to_vector_db_incremental(chunks: list, filename: str, doc_id: str, start_index: int = 0):
+    """
+    Helper function to insert a pre-chunked list of texts incrementally to save RAM.
+    """
+    for i, chunk in enumerate(chunks):
+        uid = f"{doc_id}_{start_index + i}"
+        embedding = model.encode(chunk).tolist()
+        collection.upsert(
+            ids=[uid],
+            embeddings=[embedding],
+            metadatas=[{"text": chunk, "type": "uploaded_document", "filename": filename}]
+        )
+
+
 def remove_document_from_vector_db(doc_id: str, chunks_count: int):
     """
     Deletes document chunks from Chroma.

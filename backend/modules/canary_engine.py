@@ -182,8 +182,8 @@ class CanaryEngine:
                 common_metrics = [m for m in ["qty_on_hand", "reorder_point", "tickets"] if m in pattern]
                 if not common_metrics:
                     continue
-                v_curr = np.array([current_metrics[m] for m in common_metrics])
-                v_pat = np.array([pattern[m] for m in common_metrics])
+                v_curr = np.array([current_metrics[m] for m in common_metrics], dtype=np.float32)
+                v_pat = np.array([pattern[m] for m in common_metrics], dtype=np.float32)
                 
                 # Normalize
                 v_curr_norm = v_curr / (np.linalg.norm(v_curr) + 1e-9)
