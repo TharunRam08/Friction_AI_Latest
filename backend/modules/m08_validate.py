@@ -76,7 +76,18 @@ Return ONLY valid JSON:
         response_format={"type": "json_object"},
         temperature=0.1,
     )
-    return json.loads(resp.choices[0].message.content)
+    try:
+        result = json.loads(resp.choices[0].message.content)
+        if isinstance(result, dict):
+            return result
+    except Exception as e:
+        print(f"[!] Validation JSON decode error: {e}")
+    return {
+        "evidence_score": 70,
+        "evidence_breakdown": [],
+        "constraints": [],
+        "overall_constraint_status": "Clear"
+    }
 
 
 def self_review(

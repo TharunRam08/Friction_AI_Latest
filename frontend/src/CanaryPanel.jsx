@@ -15,6 +15,7 @@ export default function CanaryPanel({ API }) {
   const [triggering, setTriggering] = useState(false);
   const [expandedLogId, setExpandedLogId] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(null);
+  const [scanResult, setScanResult] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -52,7 +53,6 @@ export default function CanaryPanel({ API }) {
       const diff = new Date(config.next_run) - new Date();
       if (diff <= 0) {
         setTimeRemaining("Scanning now...");
-        fetchData();
       } else {
         const secs = Math.ceil(diff / 1000);
         if (secs < 60) {
@@ -96,8 +96,14 @@ export default function CanaryPanel({ API }) {
 
   const handleManualTrigger = async () => {
     setTriggering(true);
+    setScanResult(null);
     try {
-      await axios.post(`${API}/api/canary/trigger`);
+      const res = await axios.post(`${API}/api/canary/trigger`);
+      if (res.data && !res.data.error) {
+        setScanResult(res.data);
+      } else if (res.data && res.data.error) {
+        console.error(res.data.error);
+      }
       fetchData();
     } catch (e) {
       console.error(e);
@@ -260,6 +266,55 @@ export default function CanaryPanel({ API }) {
           <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">Active Sentinel Alerts</span>
           <span className="text-xs text-zinc-400">Simplified, real-life risk profiles flagged dynamically by the watchdog</span>
         </div>
+
+        {scanResult && (
+          <div className="bg-blue-955/20 border border-blue-800/30 p-4.5 rounded-xl flex items-start justify-between gap-3 text-blue-400 text-xs animate-fade-in">
+            <div className="flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 flex-shrink-0 text-blue-400 mt-0.5" />
+              <div>
+                <h4 className="font-bold text-white uppercase tracking-wider text-[11px]">Manual Scan Finished</h4>
+                <p className="text-zinc-300 mt-1.5 leading-relaxed font-medium">{scanResult.summary}</p>
+                {scanResult.details && (
+                  <div className="mt-3 font-mono text-[10px] text-zinc-400 bg-black/40 p-3 rounded-lg border border-[#1e1e22] space-y-1">
+                    <div className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider">Telemetry Details</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1.5">
+                      <div>
+                        <span className="text-zinc-550 block font-bold">Qty On Hand:</span>
+                        <span className="text-zinc-200">{scanResult.details.metrics?.qty_on_hand?.toFixed(1) ?? 'N/A'}</span>
+                      </div>
+                      <div>
+                        <span className="text-zinc-550 block font-bold">Reorder Point:</span>
+                        <span className="text-zinc-200">{scanResult.details.metrics?.reorder_point?.toFixed(1) ?? 'N/A'}</span>
+                      </div>
+                      <div>
+                        <span className="text-zinc-550 block font-bold">Daily Avg Tickets:</span>
+                        <span className="text-zinc-200">{scanResult.details.metrics?.tickets?.toFixed(2) ?? 'N/A'}</span>
+                      </div>
+                      <div>
+                        <span className="text-zinc-550 block font-bold">Aggregate Score:</span>
+                        <span className="text-zinc-200">{scanResult.details.aggregate_score?.toFixed(2) ?? 'N/A'}</span>
+                      </div>
+                      <div>
+                        <span className="text-zinc-550 block font-bold">Max Failure Similarity:</span>
+                        <span className="text-zinc-200">{scanResult.details.highest_similarity ? (scanResult.details.highest_similarity * 100).toFixed(1) : 'N/A'}%</span>
+                      </div>
+                      <div>
+                        <span className="text-zinc-550 block font-bold">Matched Profile:</span>
+                        <span className="text-zinc-200 truncate block max-w-[180px]">{scanResult.details.matched_failure_title || 'None'}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <button 
+              onClick={() => setScanResult(null)}
+              className="text-zinc-500 hover:text-zinc-300 font-bold uppercase text-[9.5px] tracking-wider flex-shrink-0 mt-0.5 transition"
+            >
+              Clear
+            </button>
+          </div>
+        )}
 
         {alerts.length === 0 ? (
           <div className="border border-dashed border-[#1e1e22] rounded-xl py-12 flex flex-col items-center justify-center text-center">

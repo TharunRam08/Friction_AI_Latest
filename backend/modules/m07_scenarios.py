@@ -65,7 +65,14 @@ Return ONLY valid JSON:
         response_format={"type": "json_object"},
         temperature=0.3,
     )
-    result = json.loads(resp.choices[0].message.content)
+    try:
+        result = json.loads(resp.choices[0].message.content)
+        if not isinstance(result, dict):
+            result = {}
+    except Exception as e:
+        print(f"[!] Scenarios JSON decode error: {e}")
+        result = {}
+
     return {
         "scenarios": result.get("scenarios", []),
         "devils_advocate": result.get("devils_advocate", []),

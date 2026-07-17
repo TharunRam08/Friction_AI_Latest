@@ -26,6 +26,7 @@ from modules.m06_debate import run_debate
 from modules.m08_validate import validate_evidence_and_constraints, self_review
 from modules.m07_scenarios import run_scenarios_and_regret
 from modules.m09_nemotron import run_nemotron_synthesis
+from modules.m_external_context import build_external_context
 
 # CRM Data helpers
 from data.crm_db import (
@@ -166,6 +167,13 @@ async def reason(request: QueryRequest):
     past_memory, memory_score = get_past_context(question, goal, intent)
     non_neg_score = max(0.0, memory_score)
 
+    # External Context — fetched concurrently (read-only, advisory only).
+    # Runs in a background thread while the pipeline continues; result is
+    # collected at synthesis time.  Any failure returns "" silently.
+    from concurrent.futures import Future as _Future
+    _ext_executor = ThreadPoolExecutor(max_workers=1)
+    _ext_future = _ext_executor.submit(build_external_context, intent, question)
+
     pipeline_executed = ["Intent", "Friction", "Context", "Memory"]
 
     # ── PHASE 2: ANALYZE (MEDIUM + HIGH only) ────────────────────────────────
@@ -213,6 +221,15 @@ async def reason(request: QueryRequest):
     # ── PHASE 5: DECIDE — Final Synthesis ────────────────────────────────────
     pipeline_executed += ["Synthesis", "Explainability", "Learning"]
 
+    # Collect external context (background fetch started in Phase 1).
+    # get() with a short timeout so a hung network call never blocks synthesis.
+    try:
+        external_context = _ext_future.result(timeout=8)
+    except Exception:
+        external_context = ""
+    finally:
+        _ext_executor.shutdown(wait=False)
+
     output = run_nemotron_synthesis(
         question=question,
         intent=intent,
@@ -225,7 +242,8 @@ async def reason(request: QueryRequest):
         validation=validation,
         scenarios_data=scenarios_data,
         self_review_text=self_review_text,
-        client_groq=client
+        client_groq=client,
+        external_context=external_context,
     )
 
     # ── Format response for frontend ─────────────────────────────────────────
@@ -321,6 +339,7 @@ async def reason(request: QueryRequest):
         "recommendation": "\n\n".join(rec_parts),
         "output": output,  # Full rich output object
         "confidence": confidence_data,
+        "external_context": external_context,  # Advisory market backdrop; empty string if unavailable
     }
 
 
@@ -966,14 +985,12 @@ async def future_forecast(request: FutureForecastRequest):
     3. Scenario projections for each decision path
     Returns enriched multi-path future projections with monthly bars.
     """
-    import serpapi as serpapi_client
-
     # ── 1. Fetch real market data ─────────────────────────────────────────────
     market_indexes = []
     market_sentiment = "NEUTRAL"
     try:
-        serp = serpapi_client.Client(api_key="e308d24f710bcef82ce75df292e254fe519ec89c89679782c5cb363e42e3297f")
-        mkt_res = serp.search({"engine": "google_finance_markets", "trend": "indexes"})
+        from serpapi import GoogleSearch
+        mkt_res = GoogleSearch({"engine": "google_finance_markets", "trend": "indexes", "api_key": "e308d24f710bcef82ce75df292e254fe519ec89c89679782c5cb363e42e3297f"}).get_dict()
         raw_indexes = mkt_res.get("market_trends", {}).get("indexes", []) or []
         for idx in raw_indexes[:5]:
             price = idx.get("price", "N/A")
@@ -1000,6 +1017,8 @@ async def future_forecast(request: FutureForecastRequest):
             {"name": "DOW", "price": "39,100", "change_pct": -0.15, "direction": "down"},
         ]
         market_sentiment = "NEUTRAL"
+
+
 
     # ── 2. CRM snapshot ───────────────────────────────────────────────────────
     fin = get_financial_summary()

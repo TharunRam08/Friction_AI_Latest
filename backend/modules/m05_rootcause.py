@@ -45,7 +45,14 @@ Return ONLY valid JSON:
             continue
     if resp is None:
         raise last_err if last_err is not None else Exception("All models failed")
-    result = json.loads(resp.choices[0].message.content)
+    try:
+        result = json.loads(resp.choices[0].message.content)
+        if not isinstance(result, dict):
+            result = {}
+    except Exception as e:
+        print(f"[!] Root cause JSON decode error: {e}")
+        result = {}
+
     return {
         "surface_problem": result.get("surface_problem", ""),
         "cause_chain": result.get("cause_chain", []),

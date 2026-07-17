@@ -32,4 +32,10 @@ def get_intent(question: str, client) -> dict:
     if chat_completion is None:
         raise last_err if last_err is not None else Exception("All models failed")
     clean_json = chat_completion.choices[0].message.content.strip()
-    return json.loads(clean_json)
+    try:
+        res = json.loads(clean_json)
+        if isinstance(res, dict):
+            return res
+    except Exception as e:
+        print(f"[!] Intent JSON decode error: {e}")
+    return {"goal": question, "constraints": [], "time_horizon": "Medium Term"}

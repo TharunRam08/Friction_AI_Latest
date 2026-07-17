@@ -44,7 +44,14 @@ Return ONLY valid JSON:
             continue
     if resp is None:
         raise last_err if last_err is not None else Exception("All models failed")
-    result = json.loads(resp.choices[0].message.content)
+    try:
+        result = json.loads(resp.choices[0].message.content)
+        if not isinstance(result, dict):
+            result = {}
+    except Exception as e:
+        print(f"[!] Friction level JSON decode error: {e}")
+        result = {}
+
     level = result.get("level", "MEDIUM").upper()
     if level not in ("LOW", "MEDIUM", "HIGH"):
         level = "MEDIUM"

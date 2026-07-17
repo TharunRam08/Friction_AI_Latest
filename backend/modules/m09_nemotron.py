@@ -21,7 +21,8 @@ def run_nemotron_synthesis(
     validation: dict,
     scenarios_data: dict,
     self_review_text: str,
-    client_groq=None
+    client_groq=None,
+    external_context: str = "",
 ) -> dict:
     """
     Final synthesis module — takes ALL upstream outputs and produces
@@ -64,6 +65,8 @@ def run_nemotron_synthesis(
     # ── System Prompt ─────────────────────────────────────────────────────────
     system_prompt = """You are Friction — an enterprise-grade AI business reasoning engine.
 You have completed a full cognitive analysis pipeline. Now produce the final executive output.
+
+If an [EXTERNAL MARKET CONTEXT — ADVISORY ONLY] block is present in the input, you may use it solely to add market framing or backdrop to your narrative — it must never change the verdict, confidence score, evidence score, or department stances, which are derived exclusively from internal CRM data.
 
 You do NOT sound like ChatGPT. You sound like a Board-level advisor with real data.
 Your output is NOT generic. Every sentence references specific numbers from the context.
@@ -179,6 +182,11 @@ Regret Analysis: {regret_str}
 
 Self Review: {self_review_text}"""
 
+    # Append external advisory context if available — placed last so LLM
+    # processes all CRM evidence before seeing market framing.
+    if external_context:
+        user_content += f"\n\nExternal Market Context (advisory, not evidence — must not change verdict or confidence):\n{external_context}"
+
     def _try_nvidia():
         completion = nvidia_client.chat.completions.create(
             model="nvidia/nemotron-3-ultra-550b-a55b",
@@ -220,13 +228,23 @@ Self Review: {self_review_text}"""
     raw = None
     try:
         raw = _try_nvidia()
+        # Verify JSON validity immediately to trigger Groq fallback on truncation
+        clean_test = raw.strip()
+        if "```json" in clean_test:
+            clean_test = clean_test.split("```json")[1].split("```")[0].strip()
+        elif "```" in clean_test:
+            clean_test = clean_test.split("```")[1].split("```")[0].strip()
+        json.loads(clean_test)
     except Exception as e:
-        print(f"\n[!] NVIDIA failed ({e}). Using Groq fallback...")
+        print(f"\n[!] NVIDIA failed or returned invalid JSON ({e}). Using Groq fallback...")
         if client_groq:
             try:
                 raw = _try_groq()
             except Exception as ge:
                 print(f"[!] Groq also failed: {ge}")
+                raw = None
+        else:
+            raw = None
 
     if not raw:
         return _fallback_response(question, friction_level)
