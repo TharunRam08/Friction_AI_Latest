@@ -15,6 +15,7 @@ from pydantic import BaseModel
 import uvicorn
 import shutil
 import time
+from datetime import datetime
 
 from modules.m01_intent import get_intent
 from modules.m02_friction import get_friction_level
@@ -1494,6 +1495,96 @@ async def get_crm_data_api(days: int = 30):
         "insights": ai_insights,
         "inventory_items": data.get("inventory_items", [])
     }
+
+
+# ── Canary Lifecycle Handlers ──────────────────────────────────────────────────
+@app.on_event("startup")
+async def startup_event():
+    from modules.canary_engine import CanaryEngine
+    # Start background scheduler singleton
+    CanaryEngine().start()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    from modules.canary_engine import CanaryEngine
+    # Stop background scheduler singleton
+    CanaryEngine().stop()
+
+
+# ── Canary APIs ────────────────────────────────────────────────────────────────
+from data.canary_db import (
+    get_canary_config, update_canary_config, get_canary_alerts,
+    update_alert_feedback, get_canary_logs, get_failure_library
+)
+from modules.canary_engine import CanaryEngine
+
+class CanaryConfigRequest(BaseModel):
+    running: int
+    interval_minutes: int
+
+@app.get("/api/canary/config")
+async def get_canary_config_api():
+    try:
+        return get_canary_config()
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/api/canary/config")
+async def update_canary_config_api(request: CanaryConfigRequest):
+    try:
+        config = get_canary_config()
+        next_run = None
+        if request.running == 1 and config.get("running") == 0:
+            next_run = datetime.now().isoformat()
+            
+        update_canary_config(
+            running=request.running,
+            interval_minutes=request.interval_minutes,
+            next_run=next_run
+        )
+        return {"status": "success", "config": get_canary_config()}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/api/canary/alerts")
+async def get_canary_alerts_api(limit: int = 50):
+    try:
+        return get_canary_alerts(limit)
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/api/canary/alerts/{alert_id}/feedback")
+async def update_canary_feedback_api(alert_id: int, feedback: str):
+    try:
+        update_alert_feedback(alert_id, feedback)
+        return {"status": "success"}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/api/canary/logs")
+async def get_canary_logs_api(limit: int = 50):
+    try:
+        return get_canary_logs(limit)
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.get("/api/canary/failure-library")
+async def get_failure_library_api():
+    try:
+        return get_failure_library()
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/api/canary/trigger")
+async def trigger_canary_manual():
+    try:
+        engine = CanaryEngine()
+        summary, details = engine.run_scan()
+        from data.canary_db import log_canary_run
+        log_canary_run(datetime.now().isoformat(), 100.0, 1, summary, details)
+        return {"status": "success", "summary": summary, "details": json.loads(details)}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 # ── Run ───────────────────────────────────────────────────────────────────────

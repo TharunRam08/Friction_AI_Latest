@@ -11,6 +11,7 @@ import {
   Menu
 } from 'lucide-react';
 import CRMDashboard from './CRMDashboard';
+import CanaryPanel from './CanaryPanel';
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -2036,6 +2037,11 @@ function App() {
               <TrendingUp className="w-3.5 h-3.5 text-zinc-500" />
               <span>Live CRM</span>
             </button>
+            <button onClick={() => { setCurrentPage('canary'); if (isMobileDrawer) setMobileDrawerOpen(false); }}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-[11.5px] font-semibold transition-all text-left ${currentPage === 'canary' ? 'bg-[#161617] border-[#232325] text-white' : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-[#161618]/50'}`}>
+              <Shield className="w-3.5 h-3.5 text-zinc-500" />
+              <span>Canary Sentinel</span>
+            </button>
             <button onClick={() => { setCurrentPage('architecture'); if (isMobileDrawer) setMobileDrawerOpen(false); }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border text-[11.5px] font-semibold transition-all text-left ${currentPage === 'architecture' ? 'bg-[#161617] border-[#232325] text-white' : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-[#161618]/50'}`}>
               <GitBranch className="w-3.5 h-3.5 text-zinc-500" />
@@ -2245,6 +2251,8 @@ function App() {
           <ArchitecturePage />
         ) : currentPage === 'crm' ? (
           <CRMDashboard API={API} />
+        ) : currentPage === 'canary' ? (
+          <CanaryPanel API={API} />
         ) : (
           <div className="flex-1 overflow-y-auto px-4 sm:px-8 pt-6 pb-28 md:pb-6 space-y-8 max-w-4xl w-full mx-auto flex flex-col">
 
