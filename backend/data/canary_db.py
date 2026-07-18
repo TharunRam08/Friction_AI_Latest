@@ -113,7 +113,7 @@ def update_canary_config(running: int, interval_minutes: int, last_run: str = No
     conn = get_conn()
     conn.execute("""
     UPDATE canary_config
-    SET running = ?, interval_minutes = ?, last_run = COALESCE(?, last_run), next_run = COALESCE(?, next_run)
+    SET running = ?, interval_minutes = ?, last_run = ?, next_run = ?
     WHERE id = 1
     """, (running, interval_minutes, last_run, next_run))
     conn.commit()

@@ -15,7 +15,7 @@ from pydantic import BaseModel
 import uvicorn
 import shutil
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 from modules.m01_intent import get_intent
 from modules.m02_friction import get_friction_level
@@ -1627,6 +1627,13 @@ async def get_crm_data_api(days: int = 30):
     }
 
 
+# ── Health Check ───────────────────────────────────────────────────────────────
+@app.get("/health")
+async def health_check():
+    """Lightweight health check used by keep-alive pings and Render's health monitor."""
+    return {"status": "ok", "service": "friction-ai"}
+
+
 # ── Canary Lifecycle Handlers ──────────────────────────────────────────────────
 @app.on_event("startup")
 async def startup_event():
@@ -1664,13 +1671,25 @@ async def get_canary_config_api():
 async def update_canary_config_api(request: CanaryConfigRequest):
     try:
         config = get_canary_config()
-        next_run = None
+        # Preserve last_run — we're only changing running/interval/next_run here
+        preserved_last_run = config.get("last_run")
+
         if request.running == 1 and config.get("running") == 0:
-            next_run = datetime.now().isoformat()
-            
+            # Toggling ON: set next_run to now so the scheduler fires immediately
+            next_run = datetime.now(timezone.utc).isoformat()
+        elif request.running == 0:
+            # Toggling OFF: clear next_run so the UI shows "Canary Deactivated"
+            # rather than a stale past timestamp
+            next_run = None
+            preserved_last_run = config.get("last_run")
+        else:
+            # Already running, just changing interval — keep current next_run
+            next_run = config.get("next_run")
+
         update_canary_config(
             running=request.running,
             interval_minutes=request.interval_minutes,
+            last_run=preserved_last_run,
             next_run=next_run
         )
         return {"status": "success", "config": get_canary_config()}
@@ -1720,7 +1739,7 @@ async def trigger_canary_manual():
         engine = CanaryEngine()
         summary, details = engine.run_scan()
         from data.canary_db import log_canary_run
-        log_canary_run(datetime.now().isoformat(), 100.0, 1, summary, details)
+        log_canary_run(datetime.now(timezone.utc).isoformat(), 100.0, 1, summary, details)
         return {"status": "success", "summary": summary, "details": json.loads(details)}
     except Exception as e:
         return {"error": str(e)}

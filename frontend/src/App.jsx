@@ -1900,6 +1900,17 @@ function App() {
     fetchDataSources();
   }, []);
 
+  // Keep-alive ping — prevents Render free tier from sleeping while the app is open.
+  // Hits /health every 10 minutes silently; errors are swallowed on purpose.
+  useEffect(() => {
+    const ping = () => {
+      fetch(`${API}/health`).catch(() => {/* intentionally silent */});
+    };
+    ping(); // ping immediately on mount
+    const id = setInterval(ping, 10 * 60 * 1000); // then every 10 minutes
+    return () => clearInterval(id);
+  }, []);
+
   // Auto-scroll
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loadingStepIdx]);
 

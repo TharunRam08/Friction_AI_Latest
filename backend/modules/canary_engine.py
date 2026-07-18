@@ -3,7 +3,7 @@ import time
 import json
 import threading
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import sqlite3
 import traceback
 import os
@@ -62,7 +62,7 @@ class CanaryEngine:
                 continue
 
             # Check if it is time to run
-            now = datetime.now()
+            now = datetime.now(timezone.utc)
             next_run_str = config.get("next_run")
             
             should_run = False
@@ -71,6 +71,9 @@ class CanaryEngine:
             else:
                 try:
                     next_run_time = datetime.fromisoformat(next_run_str)
+                    # Convert to aware UTC if parsed naive
+                    if next_run_time.tzinfo is None:
+                        next_run_time = next_run_time.replace(tzinfo=timezone.utc)
                     if now >= next_run_time:
                         should_run = True
                 except:
@@ -103,7 +106,7 @@ class CanaryEngine:
 
     def run_scan(self):
         """Runs incremental data scanning, computes statistical similarity/drift, and fires alerts."""
-        conn = sqlite3.connect(os.path.join(os.path.dirname(__file__), "../data/crm.db"))
+        conn = sqlite3.connect(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "crm.db"))
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
@@ -279,8 +282,7 @@ class CanaryEngine:
                 headline = f"Alert: Low stock alert ({qty_on_hand:.0f} units left) paired with high customer ticket volumes ({recent_daily_avg_tickets:.1f} per day)."
                 solution = "Purchase Edge Gateway devices immediately and delegate extra developers to clear support backlog."
  
-            # Add to alerts table
-            add_canary_alert(headline, solution, evidence, severity, mode, datetime.now().isoformat())
+            add_canary_alert(headline, solution, evidence, severity, mode, datetime.now(timezone.utc).isoformat())
             summary += " ALERT FIRED!"
 
         return summary, json.dumps(details_dict, indent=2)
